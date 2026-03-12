@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>OpenLens Local Image Lab</title>
+    <title>OpenLens — Local Image Lab</title>
     <meta
       name="description"
       content="OpenLens is a static, browser-only image editor for crop, resize, rotate, compress, format conversion, and local background removal."
@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -22,235 +22,238 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="shell">
-      <header class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">OpenLens / local-only editor</p>
-          <h1>Image tooling that stays on the user’s machine.</h1>
-          <p class="lede">
-            Static HTML, CSS, and JavaScript. No uploads. No server pipeline.
-            Crop, resize, rotate, convert, compress, and remove backgrounds in
-            the browser.
-          </p>
-        </div>
-        <div class="hero-badges">
-          <span>Client-side</span>
-          <span>GitHub Pages ready</span>
-          <span>No React</span>
-        </div>
-      </header>
+    <div class="app" data-view="landing">
 
-      <main class="workspace">
-        <section class="stage card">
-          <div
-            id="dropzone"
-            class="dropzone"
-            tabindex="0"
-            role="button"
-            aria-label="Upload an image"
-          >
-            <input id="file-input" type="file" accept="image/*" hidden />
-            <div class="dropzone-copy">
-              <p class="drop-kicker">Drop an image here</p>
-              <h2>or choose a file from disk</h2>
-              <p class="drop-meta">
-                PNG, JPEG, WebP, GIF, BMP, AVIF, TIFF if your browser can decode
-                it.
-              </p>
-              <button id="pick-file" class="button button-primary" type="button">
-                Choose image
-              </button>
-            </div>
+      <!-- ===== LANDING VIEW ===== -->
+      <section class="view-landing">
+        <div class="landing-inner">
+          <header class="landing-hero">
+            <div class="landing-brand-icon">◈</div>
+            <h1 class="landing-title">OpenLens</h1>
+            <p class="landing-sub">Local Image Lab</p>
+            <p class="landing-desc">Pick a tool to get started. Everything runs in your browser — no uploads, no servers.</p>
+          </header>
+
+          <div class="tool-grid">
+            <button class="tool-card" data-select-tool="crop" type="button">
+              <div class="tool-card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 002 2h14"/><path d="M18 22V8a2 2 0 00-2-2H2"/></svg>
+              </div>
+              <span class="tool-card-name">Crop</span>
+              <span class="tool-card-desc">Trim and reframe</span>
+            </button>
+
+            <button class="tool-card" data-select-tool="resize" type="button">
+              <div class="tool-card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              </div>
+              <span class="tool-card-name">Resize</span>
+              <span class="tool-card-desc">Scale dimensions</span>
+            </button>
+
+            <button class="tool-card" data-select-tool="rotate" type="button">
+              <div class="tool-card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+              </div>
+              <span class="tool-card-name">Rotate</span>
+              <span class="tool-card-desc">Spin any angle</span>
+            </button>
+
+            <button class="tool-card" data-select-tool="convert" type="button">
+              <div class="tool-card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+              </div>
+              <span class="tool-card-name">Convert</span>
+              <span class="tool-card-desc">Format &amp; quality</span>
+            </button>
+
+            <button class="tool-card" data-select-tool="bgremove" type="button">
+              <div class="tool-card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <span class="tool-card-name">BG Remove</span>
+              <span class="tool-card-desc">AI background eraser</span>
+            </button>
           </div>
 
-          <div id="editor-panel" class="editor-panel is-hidden">
-            <div class="stage-header">
-              <div>
-                <p class="panel-kicker">Crop workspace</p>
-                <h2 id="file-name">No file loaded</h2>
-              </div>
-              <div class="stage-actions">
-                <button id="undo-button" class="button button-ghost" type="button">
-                  Undo
-                </button>
-                <button id="reset-button" class="button button-ghost" type="button">
-                  Reset
-                </button>
-                <button id="download-button" class="button button-primary" type="button">
-                  Download
-                </button>
-              </div>
-            </div>
+          <div class="landing-badges">
+            <span class="pill">Client-side</span>
+            <span class="pill">No uploads</span>
+          </div>
+        </div>
+      </section>
 
-            <div class="canvas-grid">
+      <!-- ===== TOPBAR (editor view) ===== -->
+      <nav class="topbar">
+        <button id="back-to-landing" class="back-btn" type="button" aria-label="Back to tools">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </button>
+        <div class="topbar-brand">
+          <span class="brand-icon">◈</span>
+          <span class="brand-name">OpenLens</span>
+        </div>
+        <div class="topbar-status">
+          <span id="status-text" class="status-label">Drop an image to begin.</span>
+          <div class="progress-shell" aria-hidden="true">
+            <div id="progress-bar" class="progress-bar"></div>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button id="undo-button" class="btn btn-ghost btn-sm" type="button">Undo</button>
+          <button id="reset-button" class="btn btn-ghost btn-sm" type="button">Reset</button>
+          <button id="download-button" class="btn btn-accent btn-sm" type="button">Download</button>
+        </div>
+      </nav>
+
+      <!-- ===== STUDIO (editor view) ===== -->
+      <main class="studio">
+        <div
+          id="dropzone"
+          class="dropzone"
+          tabindex="0"
+          role="button"
+          aria-label="Upload an image"
+        >
+          <input id="file-input" type="file" accept="image/*" hidden />
+          <div class="dropzone-copy">
+            <div class="drop-icon-ring">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <h2>Drop an image or choose a file</h2>
+            <p class="drop-meta">PNG, JPEG, WebP, GIF, BMP, AVIF, TIFF</p>
+            <button id="pick-file" class="btn btn-accent" type="button">Choose image</button>
+          </div>
+        </div>
+
+        <div id="editor-panel" class="editor-panel is-hidden">
+          <div class="editor-body">
+            <!-- Left: canvas -->
+            <div class="canvas-area">
               <div class="crop-surface">
                 <img id="crop-image" alt="Editable image" />
               </div>
-              <div class="preview-card">
-                <p class="panel-kicker">Current preview</p>
-                <div class="preview-frame">
-                  <img id="preview-image" alt="Processed preview" />
-                </div>
-                <dl class="meta-grid">
-                  <div>
-                    <dt>Dimensions</dt>
-                    <dd id="meta-dimensions">-</dd>
-                  </div>
-                  <div>
-                    <dt>Type</dt>
-                    <dd id="meta-format">-</dd>
-                  </div>
-                  <div>
-                    <dt>Size</dt>
-                    <dd id="meta-size">-</dd>
-                  </div>
-                  <div>
-                    <dt>History</dt>
-                    <dd id="meta-history">0 steps</dd>
-                  </div>
+            </div>
+
+            <!-- Right: tool sidebar -->
+            <aside class="tool-sidebar">
+              <!-- File meta -->
+              <div class="sidebar-meta">
+                <h2 id="file-name" class="sidebar-file-name">No file loaded</h2>
+                <dl class="sidebar-meta-strip">
+                  <div class="meta-chip"><dt>Dim</dt><dd id="meta-dimensions">-</dd></div>
+                  <div class="meta-chip"><dt>Type</dt><dd id="meta-format">-</dd></div>
+                  <div class="meta-chip"><dt>Size</dt><dd id="meta-size">-</dd></div>
+                  <div class="meta-chip"><dt>Hist</dt><dd id="meta-history">0 steps</dd></div>
                 </dl>
               </div>
-            </div>
-          </div>
-        </section>
 
-        <aside class="controls card">
-          <div class="control-header">
-            <p class="eyebrow">Control deck</p>
-            <h2>All processing happens in-browser.</h2>
-          </div>
-
-          <section class="tool-block">
-            <div class="tool-head">
-              <h3>Crop</h3>
-              <button id="apply-crop" class="button button-secondary" type="button">
-                Apply crop
-              </button>
-            </div>
-            <label class="field">
-              <span>Aspect ratio</span>
-              <select id="aspect-ratio">
-                <option value="free">Free</option>
-                <option value="1">1:1</option>
-                <option value="1.3333333333">4:3</option>
-                <option value="1.7777777778">16:9</option>
-                <option value="0.75">3:4</option>
-                <option value="0.5625">9:16</option>
-              </select>
-            </label>
-          </section>
-
-          <section class="tool-block">
-            <div class="tool-head">
-              <h3>Resize</h3>
-              <button id="apply-resize" class="button button-secondary" type="button">
-                Resize
-              </button>
-            </div>
-            <div class="field-grid">
-              <label class="field">
-                <span>Width</span>
-                <input id="resize-width" type="number" min="1" step="1" />
-              </label>
-              <label class="field">
-                <span>Height</span>
-                <input id="resize-height" type="number" min="1" step="1" />
-              </label>
-            </div>
-            <label class="toggle">
-              <input id="lock-ratio" type="checkbox" checked />
-              <span>Keep aspect ratio</span>
-            </label>
-          </section>
-
-          <section class="tool-block">
-            <div class="tool-head">
-              <h3>Rotate</h3>
-              <div class="button-row">
-                <button id="rotate-left" class="button button-secondary" type="button">
-                  -90°
-                </button>
-                <button id="rotate-right" class="button button-secondary" type="button">
-                  +90°
-                </button>
-              </div>
-            </div>
-            <label class="field">
-              <span>Custom angle</span>
-              <div class="inline-input">
-                <input id="rotate-angle" type="number" min="-360" max="360" step="1" value="0" />
-                <button id="apply-rotate" class="button button-secondary" type="button">
-                  Apply
-                </button>
-              </div>
-            </label>
-          </section>
-
-          <section class="tool-block">
-            <div class="tool-head">
-              <h3>Convert + compress</h3>
-              <button id="apply-convert" class="button button-secondary" type="button">
-                Apply
-              </button>
-            </div>
-            <div class="field-grid">
-              <label class="field">
-                <span>Format</span>
-                <select id="format-select">
-                  <option value="png">PNG</option>
-                  <option value="jpeg">JPEG</option>
-                  <option value="webp">WebP</option>
+              <!-- Tool switcher -->
+              <div class="sidebar-tool-header">
+                <select id="tool-switcher" class="tool-switcher">
+                  <option value="crop">Crop</option>
+                  <option value="resize">Resize</option>
+                  <option value="rotate">Rotate</option>
+                  <option value="convert">Convert</option>
+                  <option value="bgremove">BG Remove</option>
                 </select>
-              </label>
-              <label class="field">
-                <span>Quality</span>
-                <output id="quality-output" for="quality-range">92%</output>
-              </label>
-            </div>
-            <label class="field">
-              <input id="quality-range" type="range" min="30" max="100" step="1" value="92" />
-            </label>
-            <p class="tool-note">
-              Quality is only used for JPEG and WebP. PNG keeps lossless export.
-            </p>
-          </section>
+              </div>
 
-          <section class="tool-block">
-            <div class="tool-head">
-              <h3>Background removal</h3>
-              <button id="remove-background" class="button button-secondary" type="button">
-                Remove background
-              </button>
-            </div>
-            <label class="field">
-              <span>Model size</span>
-              <select id="bg-model">
-                <option value="small">Small</option>
-                <option value="medium" selected>Medium</option>
-                <option value="large">Large</option>
-              </select>
-            </label>
-            <p class="tool-note">
-              Uses IMG.LY in the browser. The first run downloads model files to
-              the user’s browser cache.
-            </p>
-          </section>
+              <!-- Tool panels -->
+              <div class="sidebar-panels">
+                <div class="sidebar-panel is-active" data-panel="crop">
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Width</span>
+                    <input id="crop-width" class="sidebar-input" type="number" min="1" step="1" placeholder="W" />
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Height</span>
+                    <input id="crop-height" class="sidebar-input" type="number" min="1" step="1" placeholder="H" />
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Aspect Ratio</span>
+                    <select id="aspect-ratio" class="sidebar-select">
+                      <option value="free">Free</option>
+                      <option value="1">1 : 1</option>
+                      <option value="1.3333333333">4 : 3</option>
+                      <option value="1.7777777778">16 : 9</option>
+                      <option value="0.75">3 : 4</option>
+                      <option value="0.5625">9 : 16</option>
+                    </select>
+                  </label>
+                  <button id="apply-crop" class="btn btn-accent btn-full" type="button">Apply Crop</button>
+                </div>
 
-          <section class="status-block">
-            <p class="eyebrow">Status</p>
-            <p id="status-text">Load an image to begin.</p>
-            <div class="progress-shell" aria-hidden="true">
-              <div id="progress-bar" class="progress-bar"></div>
-            </div>
-          </section>
-        </aside>
+                <div class="sidebar-panel" data-panel="resize">
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Width</span>
+                    <input id="resize-width" class="sidebar-input" type="number" min="1" step="1" placeholder="W" />
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Height</span>
+                    <input id="resize-height" class="sidebar-input" type="number" min="1" step="1" placeholder="H" />
+                  </label>
+                  <label class="sidebar-check">
+                    <input id="lock-ratio" type="checkbox" checked />
+                    <span>Lock aspect ratio</span>
+                  </label>
+                  <button id="apply-resize" class="btn btn-accent btn-full" type="button">Resize</button>
+                </div>
+
+                <div class="sidebar-panel" data-panel="rotate">
+                  <div class="sidebar-row">
+                    <button id="rotate-left" class="btn btn-ghost btn-full" type="button">−90°</button>
+                    <button id="rotate-right" class="btn btn-ghost btn-full" type="button">+90°</button>
+                  </div>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Custom angle</span>
+                    <input id="rotate-angle" class="sidebar-input" type="number" min="-360" max="360" step="1" value="0" />
+                  </label>
+                  <button id="apply-rotate" class="btn btn-accent btn-full" type="button">Apply Rotation</button>
+                </div>
+
+                <div class="sidebar-panel" data-panel="convert">
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Format</span>
+                    <select id="format-select" class="sidebar-select">
+                      <option value="png">PNG</option>
+                      <option value="jpeg">JPEG</option>
+                      <option value="webp">WebP</option>
+                    </select>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Quality</span>
+                    <div class="sidebar-range-row">
+                      <input id="quality-range" class="sidebar-range" type="range" min="30" max="100" step="1" value="92" />
+                      <output id="quality-output" class="sidebar-range-value" for="quality-range">92%</output>
+                    </div>
+                  </label>
+                  <button id="apply-convert" class="btn btn-accent btn-full" type="button">Convert</button>
+                </div>
+
+                <div class="sidebar-panel" data-panel="bgremove">
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Model</span>
+                    <select id="bg-model" class="sidebar-select">
+                      <option value="small">Small (fast)</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="large">Large (best)</option>
+                    </select>
+                  </label>
+                  <button id="remove-background" class="btn btn-accent btn-full" type="button">Remove Background</button>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
       </main>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"
-      defer
-    ></script>
+    <img id="preview-image" alt="" style="display:none!important" />
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

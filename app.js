@@ -19,6 +19,8 @@ const dom = {
   undoButton: document.querySelector("#undo-button"),
   resetButton: document.querySelector("#reset-button"),
   downloadButton: document.querySelector("#download-button"),
+  cropWidth: document.querySelector("#crop-width"),
+  cropHeight: document.querySelector("#crop-height"),
   applyCrop: document.querySelector("#apply-crop"),
   aspectRatio: document.querySelector("#aspect-ratio"),
   resizeWidth: document.querySelector("#resize-width"),
@@ -88,7 +90,7 @@ function formatBytes(bytes) {
 function setBusy(isBusy) {
   state.busy = isBusy;
   document.querySelectorAll("button, input, select").forEach((element) => {
-    if (!element.closest(".dropzone")) {
+    if (!element.closest(".dropzone") && !element.closest(".view-landing") && !element.classList.contains("back-btn") && !element.classList.contains("tool-switcher")) {
       element.disabled = isBusy;
     }
   });
@@ -196,6 +198,10 @@ async function renderCurrentImage() {
     background: false,
     autoCropArea: 1,
     restore: false,
+    crop(event) {
+      dom.cropWidth.value = Math.round(event.detail.width);
+      dom.cropHeight.value = Math.round(event.detail.height);
+    },
   });
 
   applyAspectRatio();
@@ -530,6 +536,16 @@ dom.fileInput.addEventListener("change", (event) => {
   event.target.value = "";
 });
 
+dom.cropWidth.addEventListener("input", () => {
+  if (!state.cropper) return;
+  const w = Number(dom.cropWidth.value);
+  if (w > 0) state.cropper.setData({ width: w });
+});
+dom.cropHeight.addEventListener("input", () => {
+  if (!state.cropper) return;
+  const h = Number(dom.cropHeight.value);
+  if (h > 0) state.cropper.setData({ height: h });
+});
 dom.aspectRatio.addEventListener("change", applyAspectRatio);
 dom.resizeWidth.addEventListener("input", () => syncLockedDimensions("width"));
 dom.resizeHeight.addEventListener("input", () => syncLockedDimensions("height"));
@@ -547,5 +563,39 @@ dom.removeBackground.addEventListener("click", applyBackgroundRemoval);
 dom.undoButton.addEventListener("click", undo);
 dom.resetButton.addEventListener("click", resetToOriginal);
 dom.downloadButton.addEventListener("click", downloadCurrent);
+
+// --- Tool sidebar switching ---
+const toolSwitcher = document.querySelector("#tool-switcher");
+
+function activateTool(tool) {
+  document.querySelectorAll(".sidebar-panel").forEach((p) => {
+    p.classList.toggle("is-active", p.dataset.panel === tool);
+  });
+  if (toolSwitcher.value !== tool) toolSwitcher.value = tool;
+}
+
+toolSwitcher.addEventListener("change", () => {
+  activateTool(toolSwitcher.value);
+});
+
+// --- View switching: landing <-> editor ---
+const appEl = document.querySelector(".app");
+
+function switchToEditor(tool) {
+  appEl.dataset.view = "editor";
+  activateTool(tool);
+}
+
+function switchToLanding() {
+  appEl.dataset.view = "landing";
+}
+
+document.querySelectorAll(".tool-card").forEach((card) => {
+  card.addEventListener("click", () => {
+    switchToEditor(card.dataset.selectTool);
+  });
+});
+
+document.querySelector("#back-to-landing").addEventListener("click", switchToLanding);
 
 syncUndoButtons();
