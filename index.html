@@ -1,21 +1,256 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>PixelForge — AI Image Editor | Free &amp; Private</title>
-    <meta name="description" content="PixelForge — Free client-side image editor with AI background removal, upscaling, crop, resize, and format conversion. 100% private, nothing leaves your browser." />
-    <meta name="author" content="PixelForge" />
-    <meta property="og:title" content="PixelForge — AI Image Editor" />
-    <meta property="og:description" content="Free client-side image editor with AI background removal, upscaling, crop, resize. 100% private." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OpenLens Local Image Lab</title>
+    <meta
+      name="description"
+      content="OpenLens is a static, browser-only image editor for crop, resize, rotate, compress, format conversion, and local background removal."
+    />
+    <meta name="theme-color" content="#0f1417" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">OpenLens / local-only editor</p>
+          <h1>Image tooling that stays on the user’s machine.</h1>
+          <p class="lede">
+            Static HTML, CSS, and JavaScript. No uploads. No server pipeline.
+            Crop, resize, rotate, convert, compress, and remove backgrounds in
+            the browser.
+          </p>
+        </div>
+        <div class="hero-badges">
+          <span>Client-side</span>
+          <span>GitHub Pages ready</span>
+          <span>No React</span>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="stage card">
+          <div
+            id="dropzone"
+            class="dropzone"
+            tabindex="0"
+            role="button"
+            aria-label="Upload an image"
+          >
+            <input id="file-input" type="file" accept="image/*" hidden />
+            <div class="dropzone-copy">
+              <p class="drop-kicker">Drop an image here</p>
+              <h2>or choose a file from disk</h2>
+              <p class="drop-meta">
+                PNG, JPEG, WebP, GIF, BMP, AVIF, TIFF if your browser can decode
+                it.
+              </p>
+              <button id="pick-file" class="button button-primary" type="button">
+                Choose image
+              </button>
+            </div>
+          </div>
+
+          <div id="editor-panel" class="editor-panel is-hidden">
+            <div class="stage-header">
+              <div>
+                <p class="panel-kicker">Crop workspace</p>
+                <h2 id="file-name">No file loaded</h2>
+              </div>
+              <div class="stage-actions">
+                <button id="undo-button" class="button button-ghost" type="button">
+                  Undo
+                </button>
+                <button id="reset-button" class="button button-ghost" type="button">
+                  Reset
+                </button>
+                <button id="download-button" class="button button-primary" type="button">
+                  Download
+                </button>
+              </div>
+            </div>
+
+            <div class="canvas-grid">
+              <div class="crop-surface">
+                <img id="crop-image" alt="Editable image" />
+              </div>
+              <div class="preview-card">
+                <p class="panel-kicker">Current preview</p>
+                <div class="preview-frame">
+                  <img id="preview-image" alt="Processed preview" />
+                </div>
+                <dl class="meta-grid">
+                  <div>
+                    <dt>Dimensions</dt>
+                    <dd id="meta-dimensions">-</dd>
+                  </div>
+                  <div>
+                    <dt>Type</dt>
+                    <dd id="meta-format">-</dd>
+                  </div>
+                  <div>
+                    <dt>Size</dt>
+                    <dd id="meta-size">-</dd>
+                  </div>
+                  <div>
+                    <dt>History</dt>
+                    <dd id="meta-history">0 steps</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="controls card">
+          <div class="control-header">
+            <p class="eyebrow">Control deck</p>
+            <h2>All processing happens in-browser.</h2>
+          </div>
+
+          <section class="tool-block">
+            <div class="tool-head">
+              <h3>Crop</h3>
+              <button id="apply-crop" class="button button-secondary" type="button">
+                Apply crop
+              </button>
+            </div>
+            <label class="field">
+              <span>Aspect ratio</span>
+              <select id="aspect-ratio">
+                <option value="free">Free</option>
+                <option value="1">1:1</option>
+                <option value="1.3333333333">4:3</option>
+                <option value="1.7777777778">16:9</option>
+                <option value="0.75">3:4</option>
+                <option value="0.5625">9:16</option>
+              </select>
+            </label>
+          </section>
+
+          <section class="tool-block">
+            <div class="tool-head">
+              <h3>Resize</h3>
+              <button id="apply-resize" class="button button-secondary" type="button">
+                Resize
+              </button>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <span>Width</span>
+                <input id="resize-width" type="number" min="1" step="1" />
+              </label>
+              <label class="field">
+                <span>Height</span>
+                <input id="resize-height" type="number" min="1" step="1" />
+              </label>
+            </div>
+            <label class="toggle">
+              <input id="lock-ratio" type="checkbox" checked />
+              <span>Keep aspect ratio</span>
+            </label>
+          </section>
+
+          <section class="tool-block">
+            <div class="tool-head">
+              <h3>Rotate</h3>
+              <div class="button-row">
+                <button id="rotate-left" class="button button-secondary" type="button">
+                  -90°
+                </button>
+                <button id="rotate-right" class="button button-secondary" type="button">
+                  +90°
+                </button>
+              </div>
+            </div>
+            <label class="field">
+              <span>Custom angle</span>
+              <div class="inline-input">
+                <input id="rotate-angle" type="number" min="-360" max="360" step="1" value="0" />
+                <button id="apply-rotate" class="button button-secondary" type="button">
+                  Apply
+                </button>
+              </div>
+            </label>
+          </section>
+
+          <section class="tool-block">
+            <div class="tool-head">
+              <h3>Convert + compress</h3>
+              <button id="apply-convert" class="button button-secondary" type="button">
+                Apply
+              </button>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <span>Format</span>
+                <select id="format-select">
+                  <option value="png">PNG</option>
+                  <option value="jpeg">JPEG</option>
+                  <option value="webp">WebP</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Quality</span>
+                <output id="quality-output" for="quality-range">92%</output>
+              </label>
+            </div>
+            <label class="field">
+              <input id="quality-range" type="range" min="30" max="100" step="1" value="92" />
+            </label>
+            <p class="tool-note">
+              Quality is only used for JPEG and WebP. PNG keeps lossless export.
+            </p>
+          </section>
+
+          <section class="tool-block">
+            <div class="tool-head">
+              <h3>Background removal</h3>
+              <button id="remove-background" class="button button-secondary" type="button">
+                Remove background
+              </button>
+            </div>
+            <label class="field">
+              <span>Model size</span>
+              <select id="bg-model">
+                <option value="small">Small</option>
+                <option value="medium" selected>Medium</option>
+                <option value="large">Large</option>
+              </select>
+            </label>
+            <p class="tool-note">
+              Uses IMG.LY in the browser. The first run downloads model files to
+              the user’s browser cache.
+            </p>
+          </section>
+
+          <section class="status-block">
+            <p class="eyebrow">Status</p>
+            <p id="status-text">Load an image to begin.</p>
+            <div class="progress-shell" aria-hidden="true">
+              <div id="progress-bar" class="progress-bar"></div>
+            </div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"
+      defer
+    ></script>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>
