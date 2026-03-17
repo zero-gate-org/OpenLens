@@ -646,6 +646,9 @@ button, input, select, output { font: inherit; letter-spacing: inherit; }
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--line);
   border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .crop-surface img {
