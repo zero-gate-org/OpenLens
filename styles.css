@@ -177,6 +177,31 @@ button, input, select, output { font: inherit; letter-spacing: inherit; }
   flex-wrap: wrap;
 }
 
+.hero-embed {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-embed-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 10px;
+  outline: none;
+}
+
+.hero-embed-link:focus-visible {
+  box-shadow: 0 0 0 3px rgba(171, 255, 203, 0.22);
+}
+
+.hero-embed-image {
+  height: 72px;
+  width: auto;
+  max-width: min(520px, 100%);
+}
+
 .btn-primary {
   background: var(--text);
   color: var(--bg);
