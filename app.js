@@ -113,6 +113,37 @@ function destroyCropper() {
   }
 }
 
+function ensureCropper() {
+  if (!state.current || state.cropper) return;
+  if (!window.Cropper) {
+    throw new Error("CropperJS failed to load.");
+  }
+
+  state.cropper = new window.Cropper(dom.cropImage, {
+    viewMode: 1,
+    dragMode: "move",
+    responsive: true,
+    background: false,
+    autoCropArea: 0.84,
+    restore: false,
+    ready() {
+      // Make the crop box clearly visible/active on first sight by defaulting
+      // to a slightly smaller selector than the image preview.
+      const canvasData = this.cropper.getCanvasData();
+      const size = Math.min(canvasData.width, canvasData.height) * 0.78;
+      const left = canvasData.left + (canvasData.width - size) / 2;
+      const top = canvasData.top + (canvasData.height - size) / 2;
+      this.cropper.setCropBoxData({ left, top, width: size, height: size });
+    },
+    crop(event) {
+      dom.cropWidth.value = Math.round(event.detail.width);
+      dom.cropHeight.value = Math.round(event.detail.height);
+    },
+  });
+
+  applyAspectRatio();
+}
+
 function loadImageElementFromBlob(blob) {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(blob);
@@ -166,9 +197,6 @@ function clearHistory() {
 
 async function renderCurrentImage() {
   if (!state.current) return;
-  if (!window.Cropper) {
-    throw new Error("CropperJS failed to load.");
-  }
 
   dom.editorPanel.classList.remove("is-hidden");
   dom.dropzone.classList.add("has-image");
@@ -192,30 +220,8 @@ async function renderCurrentImage() {
   });
 
   fitCanvasToImagePreview();
-
-  state.cropper = new window.Cropper(dom.cropImage, {
-    viewMode: 1,
-    dragMode: "move",
-    responsive: true,
-    background: false,
-    autoCropArea: 0.84,
-    restore: false,
-    ready() {
-      // Make the crop box clearly visible/active on first sight by defaulting
-      // to a slightly smaller selector than the image preview.
-      const canvasData = this.cropper.getCanvasData();
-      const size = Math.min(canvasData.width, canvasData.height) * 0.78;
-      const left = canvasData.left + (canvasData.width - size) / 2;
-      const top = canvasData.top + (canvasData.height - size) / 2;
-      this.cropper.setCropBoxData({ left, top, width: size, height: size });
-    },
-    crop(event) {
-      dom.cropWidth.value = Math.round(event.detail.width);
-      dom.cropHeight.value = Math.round(event.detail.height);
-    },
-  });
-
-  applyAspectRatio();
+  // Only show crop selector UI when Crop is the active tool.
+  if (toolSwitcher?.value === "crop") ensureCropper();
   syncUndoButtons();
 }
 
@@ -615,6 +621,13 @@ function activateTool(tool) {
     p.classList.toggle("is-active", p.dataset.panel === tool);
   });
   if (toolSwitcher.value !== tool) toolSwitcher.value = tool;
+
+  if (tool === "crop") {
+    fitCanvasToImagePreview();
+    ensureCropper();
+  } else {
+    destroyCropper();
+  }
 }
 
 toolSwitcher.addEventListener("change", () => {
