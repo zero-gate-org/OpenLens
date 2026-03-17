@@ -191,13 +191,24 @@ async function renderCurrentImage() {
     dom.cropImage.src = state.current.previewUrl;
   });
 
+  fitCanvasToImagePreview();
+
   state.cropper = new window.Cropper(dom.cropImage, {
     viewMode: 1,
     dragMode: "move",
     responsive: true,
     background: false,
-    autoCropArea: 1,
+    autoCropArea: 0.84,
     restore: false,
+    ready() {
+      // Make the crop box clearly visible/active on first sight by defaulting
+      // to a slightly smaller selector than the image preview.
+      const canvasData = this.cropper.getCanvasData();
+      const size = Math.min(canvasData.width, canvasData.height) * 0.78;
+      const left = canvasData.left + (canvasData.width - size) / 2;
+      const top = canvasData.top + (canvasData.height - size) / 2;
+      this.cropper.setCropBoxData({ left, top, width: size, height: size });
+    },
     crop(event) {
       dom.cropWidth.value = Math.round(event.detail.width);
       dom.cropHeight.value = Math.round(event.detail.height);
@@ -207,6 +218,38 @@ async function renderCurrentImage() {
   applyAspectRatio();
   syncUndoButtons();
 }
+
+function fitCanvasToImagePreview() {
+  const canvasArea = document.querySelector(".canvas-area");
+  const cropSurface = document.querySelector(".crop-surface");
+  if (!canvasArea || !cropSurface || !state.current) return;
+
+  // Keep the visual "canvas" a bit larger than the image when space allows.
+  // If the image is too large for the viewport, it will naturally scale down
+  // in the preview (CropperJS fits to container). This does NOT change the
+  // underlying uploaded blob in any way.
+  const availableW = Math.max(0, canvasArea.clientWidth - 48); // canvas-area has padding
+  const availableH = Math.max(0, canvasArea.clientHeight - 48);
+  if (availableW === 0 || availableH === 0) return;
+
+  const pad = 56; // visual breathing room around image
+  const desiredW = state.current.width + pad;
+  const desiredH = state.current.height + pad;
+
+  const scale = Math.min(1, availableW / desiredW, availableH / desiredH);
+  const surfaceW = Math.max(220, Math.floor(desiredW * scale));
+  const surfaceH = Math.max(220, Math.floor(desiredH * scale));
+
+  cropSurface.style.width = `${surfaceW}px`;
+  cropSurface.style.height = `${surfaceH}px`;
+}
+
+window.addEventListener("resize", () => {
+  if (!state.current) return;
+  // Re-fit the preview container; if a cropper exists, force it to reflow.
+  fitCanvasToImagePreview();
+  if (state.cropper) state.cropper.resize();
+});
 
 function syncUndoButtons() {
   const disabled = !state.current || state.busy;
