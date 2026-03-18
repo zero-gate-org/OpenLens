@@ -1225,3 +1225,284 @@ button, input, select, output { font: inherit; letter-spacing: inherit; }
   width: fit-content;    /* Allow block to shrink to text width */
   text-align: left;      /* Keep internal text left-aligned */
 }
+
+/* ========================================
+   TEXT BEHIND OBJECT (FABRIC.JS LAYER EDITOR)
+   ======================================== */
+.textoverlay-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1;
+}
+
+.textoverlay-canvas-wrap canvas {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+}
+
+.sidebar-section-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sidebar-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 0.76rem;
+  font-weight: 500;
+  resize: vertical;
+  min-height: 60px;
+  transition: border-color 160ms ease;
+  line-height: 1.5;
+}
+
+.sidebar-textarea:focus {
+  border-color: rgba(171, 255, 203, 0.35);
+  outline: none;
+}
+
+.sidebar-color-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-color {
+  width: 36px;
+  height: 34px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.sidebar-color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.sidebar-color::-webkit-color-swatch {
+  border: none;
+  border-radius: 3px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 2px;
+}
+
+.btn-xs {
+  padding: 4px 6px;
+  font-size: 0.68rem;
+}
+
+.btn-toggle {
+  flex: 1;
+  justify-content: center;
+  opacity: 0.5;
+  transition: opacity 160ms ease, background 160ms ease;
+}
+
+.btn-toggle.active {
+  opacity: 1;
+  background: rgba(171, 255, 203, 0.12);
+  border-color: rgba(171, 255, 203, 0.3);
+  color: var(--accent);
+}
+
+.tvo-hint {
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 8px 10px;
+  line-height: 1.5;
+}
+
+.layer-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px;
+  min-height: 48px;
+}
+
+.layer-hint {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 8px 4px;
+  opacity: 0.6;
+}
+
+.layer-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: grab;
+  user-select: none;
+  transition: background 120ms ease, border-color 120ms ease, opacity 120ms ease;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.layer-item:active {
+  cursor: grabbing;
+}
+
+.layer-item.drag-over {
+  border-color: rgba(171, 255, 203, 0.4);
+  background: rgba(171, 255, 203, 0.06);
+}
+
+.layer-item.dragging {
+  opacity: 0.4;
+}
+
+.layer-item.locked {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.layer-drag-handle {
+  color: var(--muted);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.5;
+}
+
+.layer-item:hover .layer-drag-handle {
+  opacity: 1;
+}
+
+.layer-item-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.layer-item-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  background: rgba(171, 255, 203, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.layer-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.layer-item-name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.layer-item-sub {
+  font-size: 0.6rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.layer-visibility {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: opacity 120ms ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.layer-visibility:hover {
+  opacity: 1;
+}
+
+.layer-visibility.visible {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.layer-visibility svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ========================================
+   FABRIC.JS CANVAS OVERRIDES
+   ======================================== */
+.textoverlay-canvas-wrap .canvas-container {
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+/* ========================================
+   TOOLTIP FOR TEXT PREVIEW
+   ======================================== */
+.tvo-text-preview {
+  position: absolute;
+  pointer-events: none;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 0.62rem;
+  color: var(--muted);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.tvo-text-preview.visible {
+  opacity: 1;
+}

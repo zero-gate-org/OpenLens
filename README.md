@@ -29,7 +29,8 @@
 - **Rotate**: Rotate by 90 degrees or fine-tune with a custom angle.
 - **Convert**: Seamlessly switch between PNG, JPEG, and WebP formats.
 - **Compress**: Optimize JPEG and WebP images with a quality slider.
-- **Privacy-First**: Remove backgrounds locally in the browser with IMG.LY's on-device AI.
+- **Privacy-First BG Remove**: Remove backgrounds locally in the browser with IMG.LY's on-device AI.
+- **Text Behind Object**: Layer text behind a foreground object for cinematic compositing (powered by Fabric.js).
 - **No Uploads**: Images stay on your machine—zero latency, enhanced security.
 
 ##  Deployment
@@ -42,8 +43,9 @@ This project is fully static and GitHub Pages friendly. It requires only the cor
 
 ## Notes
 
-- **Dependencies**: `CropperJS` and `Pica` are loaded via CDN for powerful editing capabilities.
+- **Dependencies**: `CropperJS`, `Pica`, and `Fabric.js` are loaded via CDN for powerful editing capabilities.
 - **AI Integration**: Background removal uses `@imgly/background-removal` via CDN, downloading model files to the browser cache on first use.
+- **Layer Compositing**: Text Behind Object uses Fabric.js for draggable layers, font controls, and real-time preview.
 - **Data Privacy**: All processing happens client-side. Your images are never uploaded to any server.
 
 ## License
