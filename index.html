@@ -171,12 +171,21 @@
           <img src="./OpenLens.png" alt="Logo" width="24" height="24" />
           <span class="brand-name">OpenLens</span>
         </div>
-        <div class="topbar-status">
-          <span id="status-text" class="status-label">Drop an image to begin.</span>
-          <div class="progress-shell" aria-hidden="true">
-            <div id="progress-bar" class="progress-bar"></div>
-          </div>
+        <!-- Hidden legacy nodes kept for JS compatibility -->
+        <span id="status-text" style="display:none" aria-hidden="true"></span>
+        <div id="progress-bar" style="display:none" aria-hidden="true"></div>
+
+        <!-- Centered file metadata -->
+        <div class="topbar-meta" id="topbar-meta" aria-live="polite">
+          <span id="file-name" class="topbar-filename">No file loaded</span>
+          <dl class="topbar-chips">
+            <div class="meta-chip"><dt>DIM</dt><dd id="meta-dimensions">-</dd></div>
+            <div class="meta-chip"><dt>TYPE</dt><dd id="meta-format">-</dd></div>
+            <div class="meta-chip"><dt>SIZE</dt><dd id="meta-size">-</dd></div>
+            <div class="meta-chip"><dt>HIST</dt><dd id="meta-history">0 steps</dd></div>
+          </dl>
         </div>
+
         <div class="topbar-actions">
           <button id="undo-button" class="btn btn-ghost btn-sm" type="button">Undo</button>
           <button id="reset-button" class="btn btn-ghost btn-sm" type="button">Reset</button>
@@ -215,20 +224,20 @@
               <div class="crop-surface">
                 <img id="crop-image" alt="Editable image" />
               </div>
+              <!-- Processing overlay -->
+              <div id="canvas-processing-overlay" class="canvas-processing-overlay" aria-hidden="true">
+                <div class="canvas-processing-inner">
+                  <div class="canvas-spinner"></div>
+                  <span id="canvas-status-text" class="canvas-status-text">Processing…</span>
+                  <div class="canvas-progress-shell">
+                    <div id="canvas-progress-bar" class="canvas-progress-bar"></div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Right: tool sidebar -->
             <aside class="tool-sidebar">
-              <!-- File meta -->
-              <div class="sidebar-meta">
-                <h2 id="file-name" class="sidebar-file-name">No file loaded</h2>
-                <dl class="sidebar-meta-strip">
-                  <div class="meta-chip"><dt>Dim</dt><dd id="meta-dimensions">-</dd></div>
-                  <div class="meta-chip"><dt>Type</dt><dd id="meta-format">-</dd></div>
-                  <div class="meta-chip"><dt>Size</dt><dd id="meta-size">-</dd></div>
-                  <div class="meta-chip"><dt>Hist</dt><dd id="meta-history">0 steps</dd></div>
-                </dl>
-              </div>
 
               <!-- Tool switcher -->
               <div class="sidebar-tool-header">

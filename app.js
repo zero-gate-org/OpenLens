@@ -54,6 +54,9 @@ const dom = {
   tvoApply: document.querySelector("#tvo-apply"),
   canvasArea: document.querySelector(".canvas-area"),
   cropSurface: document.querySelector(".crop-surface"),
+  canvasOverlay: document.querySelector("#canvas-processing-overlay"),
+  canvasStatusText: document.querySelector("#canvas-status-text"),
+  canvasProgressBar: document.querySelector("#canvas-progress-bar"),
 };
 
 const state = {
@@ -121,11 +124,30 @@ function setBusy(isBusy) {
     }
   });
   dom.pickFile.disabled = false;
+  // Show / hide canvas processing overlay
+  if (dom.canvasOverlay) {
+    if (isBusy) {
+      dom.canvasOverlay.classList.add("is-active");
+      dom.canvasOverlay.setAttribute("aria-hidden", "false");
+    } else {
+      dom.canvasOverlay.classList.remove("is-active");
+      dom.canvasOverlay.setAttribute("aria-hidden", "true");
+      // Reset progress bar after hide
+      setTimeout(() => {
+        if (dom.canvasProgressBar) dom.canvasProgressBar.style.width = "0%";
+      }, 350);
+    }
+  }
 }
 
 function setStatus(message, progress = 0) {
+  // Legacy hidden elements (kept for compatibility)
   dom.statusText.textContent = message;
   dom.progressBar.style.width = `${Math.max(0, Math.min(progress, 100))}%`;
+  // Canvas overlay
+  if (dom.canvasStatusText) dom.canvasStatusText.textContent = message;
+  if (dom.canvasProgressBar)
+    dom.canvasProgressBar.style.width = `${Math.max(0, Math.min(progress, 100))}%`;
 }
 
 function revokeUrl(url) {
@@ -607,6 +629,9 @@ async function tvoInitAsync() {
 
   destroyCropper();
 
+  // Show canvas processing overlay for the whole init (detection + setup)
+  setBusy(true);
+
   const originalBlob = state.original ? state.original.blob : state.current.blob;
 
   if (!tvoHasTransparentForeground()) {
@@ -728,6 +753,10 @@ async function tvoInitAsync() {
   tvoBuildLayerPanel();
   tvoSetStatus("Text Behind Object ready. Drag text to position, reorder layers below.", 100);
 
+  // Hide overlay — editor is ready
+  setBusy(false);
+  syncUndoButtons();
+
   window.addEventListener("resize", tvoOnResize);
 }
 
@@ -776,7 +805,8 @@ async function tvoLoadForeground() {
   if (!state.fabricCanvas || !state.current) return;
 
   tvoDestroy();
-  tvoSetStatus("Re-detecting foreground object...", 10);
+  setBusy(true);
+  setStatus("Re-detecting foreground object...", 10);
   dom.tvoFgStatus.textContent = "Re-detecting foreground object...";
 
   try {
@@ -802,13 +832,17 @@ async function tvoLoadForeground() {
     });
     pushHistory("Foreground re-detection");
 
-    tvoSetStatus("Foreground re-detected. Setting up editor...", 70);
+    setStatus("Foreground re-detected. Setting up editor...", 70);
+    // tvoInitAsync will call setBusy(true) again then setBusy(false) when done
+    setBusy(false);
     await tvoInitAsync();
   } catch (err) {
     console.error(err);
-    tvoSetStatus("Foreground re-detection failed.", 0);
+    setStatus("Foreground re-detection failed.", 0);
     dom.tvoFgStatus.textContent = "Re-detection failed. Try again.";
     dom.tvoFgStatus.style.color = "var(--danger)";
+    setBusy(false);
+    syncUndoButtons();
   }
 }
 

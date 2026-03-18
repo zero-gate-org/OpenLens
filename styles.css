@@ -448,6 +448,7 @@ button, input, select, output { font: inherit; letter-spacing: inherit; }
     linear-gradient(180deg, rgba(16, 21, 26, 0.98), rgba(12, 16, 18, 0.95));
   backdrop-filter: blur(16px);
   z-index: 20;
+  position: relative;
 }
 
 .topbar-brand {
@@ -470,41 +471,43 @@ button, input, select, output { font: inherit; letter-spacing: inherit; }
   letter-spacing: var(--tracking-tighter);
 }
 
-.topbar-status {
+/* Centered file metadata in topbar */
+.topbar-meta {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin-left: auto;
-  flex-shrink: 0;
+  gap: 4px;
+  pointer-events: none;
+  max-width: 340px;
 }
 
-.status-label {
-  font-size: 0.7rem;
-  color: var(--muted);
+.topbar-filename {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--text);
+  letter-spacing: var(--tracking-tight);
   white-space: nowrap;
-  letter-spacing: var(--tracking-body);
-}
-
-.progress-shell {
-  width: 64px;
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.06);
   overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
 }
 
-.progress-bar {
-  width: 0%;
-  height: 100%;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--accent), #79d8ff);
-  transition: width 220ms ease;
+.topbar-chips {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
 }
 
 .topbar-actions {
   display: flex;
   gap: 5px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .pill {
@@ -1225,6 +1228,81 @@ button, input, select, output { font: inherit; letter-spacing: inherit; }
   width: fit-content;    /* Allow block to shrink to text width */
   text-align: left;      /* Keep internal text left-aligned */
 }
+
+/* ========================================
+   CANVAS PROCESSING OVERLAY
+   ======================================== */
+.canvas-processing-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 14, 18, 0.72);
+  backdrop-filter: blur(6px);
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease;
+}
+
+.canvas-processing-overlay.is-active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.canvas-processing-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 36px;
+  background: rgba(16, 24, 30, 0.9);
+  border: 1px solid rgba(171, 255, 203, 0.15);
+  border-radius: 14px;
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(171, 255, 203, 0.06);
+  min-width: 220px;
+  text-align: center;
+}
+
+.canvas-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(171, 255, 203, 0.12);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: canvas-spin 0.7s linear infinite;
+}
+
+@keyframes canvas-spin {
+  to { transform: rotate(360deg); }
+}
+
+.canvas-status-text {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  max-width: 220px;
+}
+
+.canvas-progress-shell {
+  width: 140px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.canvas-progress-bar {
+  width: 0%;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), #79d8ff);
+  transition: width 220ms ease;
+}
+
 
 /* ========================================
    TEXT BEHIND OBJECT (FABRIC.JS LAYER EDITOR)
