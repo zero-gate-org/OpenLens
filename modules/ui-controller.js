@@ -4,6 +4,9 @@ import { formatBytes } from "./core/utils.js";
 import { destroyCropper, ensureCropper } from "./tools/crop.js";
 import { tvoDestroy, tvoInitAsync, tvoUpdateFgStatus } from "./tools/text-overlay.js";
 import { activateBlurTool, deactivateBlurTool, clearBlurCache } from "./tools/selective-blur.js";
+import { activateTiltShiftTool, deactivateTiltShiftTool } from "./tools/tilt-shift.js";
+import { activateSplashTool, deactivateSplashTool, clearSplashCache } from "./tools/color-splash.js";
+import { activateShadowTool, deactivateShadowTool, clearShadowCache } from "./tools/shadow-injection.js";
 
 export function syncUndoButtons() {
   const disabled = !state.current || state.busy;
@@ -33,6 +36,7 @@ export async function renderCurrentImage(toolSwitcher) {
   if (!isTextoverlayActive) {
     destroyCropper();
     deactivateBlurTool();
+    deactivateTiltShiftTool();
     await new Promise((resolve, reject) => {
       dom.cropImage.onload = resolve;
       dom.cropImage.onerror = reject;
@@ -41,9 +45,15 @@ export async function renderCurrentImage(toolSwitcher) {
     fitCanvasToImagePreview();
     if (toolSwitcher?.value === "crop") ensureCropper();
     if (toolSwitcher?.value === "blur") await activateBlurTool();
+    if (toolSwitcher?.value === "tiltshift") await activateTiltShiftTool();
+    if (toolSwitcher?.value === "colorsplash") await activateSplashTool();
+    if (toolSwitcher?.value === "shadowinjection") await activateShadowTool();
   } else {
     tvoDestroy();
     deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
     fitCanvasToImagePreview();
     tvoUpdateFgStatus();
     await tvoInitAsync(syncUndoButtons);
@@ -82,6 +92,9 @@ export async function activateTool(tool) {
     dom.cropSurface.style.display = "none";
     tvoDestroy();
     deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
     if (state.current) {
       await tvoInitAsync(syncUndoButtons);
     }
@@ -99,16 +112,49 @@ export async function activateTool(tool) {
 
   if (tool === "crop") {
     deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
     fitCanvasToImagePreview();
     ensureCropper();
   } else if (tool === "blur") {
     destroyCropper();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
     if (state.current) {
       await activateBlurTool();
+    }
+  } else if (tool === "tiltshift") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    if (state.current) {
+      await activateTiltShiftTool();
+    }
+  } else if (tool === "colorsplash") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateShadowTool();
+    if (state.current) {
+      await activateSplashTool();
+    }
+  } else if (tool === "shadowinjection") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    if (state.current) {
+      await activateShadowTool();
     }
   } else {
     destroyCropper();
     deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
   }
 }
 

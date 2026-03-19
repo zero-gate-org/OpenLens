@@ -22,7 +22,10 @@ import { initRotateListeners } from "./modules/tools/rotate.js";
 import { initConvertListeners } from "./modules/tools/convert.js";
 import { initBackgroundRemovalListeners } from "./modules/tools/background-removal.js";
 import { initSelectiveBlurListeners } from "./modules/tools/selective-blur.js";
+import { initTiltShiftListeners } from "./modules/tools/tilt-shift.js";
 import { initTextOverlayListeners } from "./modules/tools/text-overlay.js";
+import { initColorSplashListeners } from "./modules/tools/color-splash.js";
+import { initShadowInjectionListeners } from "./modules/tools/shadow-injection.js";
 
 // Wrapper for commitBlob that includes rendering
 async function commitBlobWithRender(blob, label, name) {
@@ -111,7 +114,10 @@ function initToolListeners() {
   initConvertListeners(commitBlobWithRender);
   initBackgroundRemovalListeners(commitBlobWithRender);
   initSelectiveBlurListeners(commitBlobWithRender);
+  initTiltShiftListeners(commitBlobWithRender);
   initTextOverlayListeners(commitBlobWithRender, syncUndoButtons);
+  initColorSplashListeners(commitBlobWithRender);
+  initShadowInjectionListeners(commitBlobWithRender);
 }
 
 // Initialize the application

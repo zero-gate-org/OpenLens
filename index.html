@@ -142,6 +142,36 @@
                 <span class="tool-card-desc">Layer text behind foreground</span>
               </div>
             </button>
+
+            <button class="tool-card" data-select-tool="tiltshift" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="12" x2="22" y2="12"/><path d="M2 6c3 3 6 4 10 4s7-1 10-4"/><path d="M2 18c3-3 6-4 10-4s7 1 10 4"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Tilt-Shift</span>
+                <span class="tool-card-desc">Miniature / toy effect</span>
+              </div>
+            </button>
+
+            <button class="tool-card" data-select-tool="colorsplash" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20" fill="currentColor" opacity="0.2"/><circle cx="12" cy="10" r="4" fill="none"/><path d="M8 16.5a6 6 0 018 0"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Color Splash</span>
+                <span class="tool-card-desc">Isolate subject colors</span>
+              </div>
+            </button>
+
+            <button class="tool-card" data-select-tool="shadowinjection" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="5"/><ellipse cx="10" cy="19" rx="7" ry="3" fill="currentColor" opacity="0.15"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Shadow Injection</span>
+                <span class="tool-card-desc">Add drop shadow behind subject</span>
+              </div>
+            </button>
           </div>
         </section>
 
@@ -268,6 +298,9 @@
                   <option value="bgremove">BG Remove</option>
                   <option value="blur">Selective Blur</option>
                   <option value="textoverlay">Text Behind Object</option>
+                  <option value="tiltshift">Tilt-Shift</option>
+                  <option value="colorsplash">Color Splash</option>
+                  <option value="shadowinjection">Shadow Injection</option>
                 </select>
               </div>
 
@@ -381,6 +414,142 @@
                     <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Smooths transition between sharp and blurred areas</small>
                   </label>
                   <button id="apply-blur" class="btn btn-accent btn-full" type="button">Apply Blur</button>
+                </div>
+
+                <div class="sidebar-panel" data-panel="tiltshift">
+                  <div class="sidebar-section-label">Blur & Focus</div>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Blur Intensity</span>
+                    <div class="sidebar-range-row">
+                      <input id="ts-blur-intensity" class="sidebar-range" type="range" min="2" max="50" step="1" value="15" />
+                      <output id="ts-blur-intensity-val" class="sidebar-range-value" for="ts-blur-intensity">15px</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Strength of blur in out-of-focus areas</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Focus Position</span>
+                    <div class="sidebar-range-row">
+                      <input id="ts-focus-position" class="sidebar-range" type="range" min="0" max="100" step="1" value="50" />
+                      <output id="ts-focus-position-val" class="sidebar-range-value" for="ts-focus-position">50%</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Vertical position of the sharp focus band</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Transition Width</span>
+                    <div class="sidebar-range-row">
+                      <input id="ts-transition-width" class="sidebar-range" type="range" min="5" max="50" step="1" value="20" />
+                      <output id="ts-transition-width-val" class="sidebar-range-value" for="ts-transition-width">20%</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Width of the gradient from sharp to blurred</small>
+                  </label>
+
+                  <div class="sidebar-section-label">Color & Tone</div>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Vibrance</span>
+                    <div class="sidebar-range-row">
+                      <input id="ts-vibrance" class="sidebar-range" type="range" min="50" max="300" step="1" value="140" />
+                      <output id="ts-vibrance-val" class="sidebar-range-value" for="ts-vibrance">140%</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Boosts muted colors more than vivid ones (Photoshop Vibrance)</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Saturation</span>
+                    <div class="sidebar-range-row">
+                      <input id="ts-saturation" class="sidebar-range" type="range" min="50" max="300" step="1" value="190" />
+                      <output id="ts-saturation-val" class="sidebar-range-value" for="ts-saturation">190%</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Uniform color intensity boost</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Brightness</span>
+                    <div class="sidebar-range-row">
+                      <input id="ts-brightness" class="sidebar-range" type="range" min="50" max="200" step="1" value="105" />
+                      <output id="ts-brightness-val" class="sidebar-range-value" for="ts-brightness">105%</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Lifts overall exposure (miniatures are typically bright)</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Contrast</span>
+                    <div class="sidebar-range-row">
+                      <input id="ts-contrast" class="sidebar-range" type="range" min="50" max="250" step="1" value="140" />
+                      <output id="ts-contrast-val" class="sidebar-range-value" for="ts-contrast">140%</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Enhances the painted/plastic appearance</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Vignette</span>
+                    <div class="sidebar-range-row">
+                      <input id="ts-vignette" class="sidebar-range" type="range" min="0" max="100" step="1" value="25" />
+                      <output id="ts-vignette-val" class="sidebar-range-value" for="ts-vignette">25%</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Darkens edges to draw focus to center</small>
+                  </label>
+                  <button id="apply-tilt-shift" class="btn btn-accent btn-full" type="button">Apply Tilt-Shift</button>
+                </div>
+
+                <div class="sidebar-panel" data-panel="colorsplash">
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Model</span>
+                    <select id="splash-model" class="sidebar-select">
+                      <option value="small">Small (fast)</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="large">Large (best)</option>
+                    </select>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Edge Feather</span>
+                    <div class="sidebar-range-row">
+                      <input id="splash-feather" class="sidebar-range" type="range" min="0" max="20" step="1" value="5" />
+                      <output id="splash-feather-val" class="sidebar-range-value" for="splash-feather">5px</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Smooths transition between color and grayscale</small>
+                  </label>
+                  <button id="apply-splash" class="btn btn-accent btn-full" type="button">Apply Color Splash</button>
+                </div>
+
+                <div class="sidebar-panel" data-panel="shadowinjection">
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Model</span>
+                    <select id="shadow-model" class="sidebar-select">
+                      <option value="small">Small (fast)</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="large">Large (best)</option>
+                    </select>
+                  </label>
+                  <div class="sidebar-section-label">Shadow Position</div>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Offset X</span>
+                    <div class="sidebar-range-row">
+                      <input id="shadow-offset-x" class="sidebar-range" type="range" min="-50" max="50" step="1" value="10" />
+                      <output id="shadow-offset-x-val" class="sidebar-range-value" for="shadow-offset-x">10px</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Horizontal shadow offset</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Offset Y</span>
+                    <div class="sidebar-range-row">
+                      <input id="shadow-offset-y" class="sidebar-range" type="range" min="-50" max="50" step="1" value="10" />
+                      <output id="shadow-offset-y-val" class="sidebar-range-value" for="shadow-offset-y">10px</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Vertical shadow offset</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Blur</span>
+                    <div class="sidebar-range-row">
+                      <input id="shadow-blur" class="sidebar-range" type="range" min="1" max="50" step="1" value="15" />
+                      <output id="shadow-blur-val" class="sidebar-range-value" for="shadow-blur">15px</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Shadow softness</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Opacity</span>
+                    <div class="sidebar-range-row">
+                      <input id="shadow-opacity" class="sidebar-range" type="range" min="10" max="100" step="1" value="60" />
+                      <output id="shadow-opacity-val" class="sidebar-range-value" for="shadow-opacity">60%</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Shadow darkness / visibility</small>
+                  </label>
+                  <button id="apply-shadow" class="btn btn-accent btn-full" type="button">Apply Shadow</button>
                 </div>
 
                 <div class="sidebar-panel" data-panel="textoverlay">

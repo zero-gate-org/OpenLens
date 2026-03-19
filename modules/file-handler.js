@@ -4,7 +4,10 @@ import { createImageState, setBusy, setStatus, revokeUrl, loadImageElementFromBl
 import { FRIENDLY_STATUS } from "./core/messages.js";
 import { destroyCropper } from "./tools/crop.js";
 import { clearBlurCache } from "./tools/selective-blur.js";
+import { clearTiltShiftCache } from "./tools/tilt-shift.js";
 import { tvoDestroy } from "./tools/text-overlay.js";
+import { clearSplashCache } from "./tools/color-splash.js";
+import { clearShadowCache } from "./tools/shadow-injection.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -35,6 +38,9 @@ export function discardImage() {
   // Tool cleanups
   destroyCropper();
   clearBlurCache();
+  clearTiltShiftCache();
+  clearSplashCache();
+  clearShadowCache();
   tvoDestroy();
 
   // Revoke object URLs
@@ -98,6 +104,9 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
     const image = await loadImageElementFromBlob(file);
     destroyCropper();
     clearBlurCache();
+    clearTiltShiftCache();
+    clearSplashCache();
+    clearShadowCache();
     clearHistory();
     state.original = createImageState({
       blob: file,
