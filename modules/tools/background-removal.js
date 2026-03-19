@@ -2,6 +2,7 @@ import { state } from "../core/state.js";
 import { dom } from "../core/dom.js";
 import { withOperation, setStatus, renameExtension } from "../core/utils.js";
 import { syncUndoButtons } from "../ui-controller.js";
+import { FRIENDLY_STATUS, progressMessage } from "../core/messages.js";
 
 let bgRemovalModulePromise = null;
 
@@ -18,7 +19,7 @@ export async function applyBackgroundRemoval(commitBlobCallback) {
   if (!state.current) return;
 
   await withOperation("Background removal", async () => {
-    setStatus("Loading background removal model...", 10);
+    setStatus(FRIENDLY_STATUS.gettingReady, 10);
     const { removeBackground } = await getBackgroundRemovalModule();
     const model = dom.bgModel.value;
 
@@ -26,8 +27,8 @@ export async function applyBackgroundRemoval(commitBlobCallback) {
       model,
       progress(key, current, total) {
         const ratio = total > 0 ? Math.round((current / total) * 100) : 0;
-        const phase = String(key).includes("download") ? "Downloading model" : "Removing background";
-        setStatus(`${phase}... ${ratio}%`, ratio);
+        const phase = progressMessage({ key, defaultPhase: "Removing background…" });
+        setStatus(`${phase} ${ratio}%`, ratio);
       },
     });
 

@@ -60,4 +60,5 @@ export const dom = {
   canvasOverlay: document.querySelector("#canvas-processing-overlay"),
   canvasStatusText: document.querySelector("#canvas-status-text"),
   canvasProgressBar: document.querySelector("#canvas-progress-bar"),
+  discardImage: document.querySelector("#discard-image"),
 };

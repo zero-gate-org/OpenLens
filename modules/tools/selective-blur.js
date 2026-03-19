@@ -2,6 +2,7 @@ import { state, MIME_BY_FORMAT } from "../core/state.js";
 import { dom } from "../core/dom.js";
 import { withOperation, setStatus, currentQuality, canvasToBlob, loadImageElementFromBlob } from "../core/utils.js";
 import { syncUndoButtons } from "../ui-controller.js";
+import { FRIENDLY_STATUS, progressMessage } from "../core/messages.js";
 
 let segmentationModulePromise = null;
 
@@ -112,7 +113,7 @@ export async function applySelectiveBlur(commitBlobCallback) {
   await withOperation("Selective blur", async () => {
     // If we have cached data, use it for faster processing
     if (blurCache.originalData && blurCache.maskData && blurCache.blobUrl === state.current.previewUrl) {
-      setStatus("Applying blur from preview...", 50);
+      setStatus(FRIENDLY_STATUS.applyingEffect, 50);
       
       const blurRadius = Number(dom.blurIntensity.value);
       const featherRadius = Number(dom.blurFeather.value);
@@ -120,11 +121,11 @@ export async function applySelectiveBlur(commitBlobCallback) {
       // Get or create blurred version
       let blurredData = blurCache.blurredDataCache.get(blurRadius);
       if (!blurredData) {
-        setStatus("Applying blur...", 60);
+        setStatus(FRIENDLY_STATUS.applyingEffect, 60);
         blurredData = applyGaussianBlur(blurCache.originalData, blurRadius);
       }
       
-      setStatus("Compositing layers...", 80);
+      setStatus(FRIENDLY_STATUS.compositing, 80);
       
       // Create final canvas
       const canvas = document.createElement("canvas");
@@ -158,7 +159,7 @@ export async function applySelectiveBlur(commitBlobCallback) {
       
       ctx.putImageData(finalData, 0, 0);
       
-      setStatus("Encoding image...", 95);
+      setStatus(FRIENDLY_STATUS.savingChanges, 95);
       
       const mime = MIME_BY_FORMAT[state.current.format] || "image/png";
       const quality = state.current.format === "png" ? undefined : currentQuality();
@@ -172,10 +173,10 @@ export async function applySelectiveBlur(commitBlobCallback) {
     }
     
     // Fallback: Full processing if no cache
-    setStatus("Loading segmentation model...", 10);
+    setStatus(FRIENDLY_STATUS.gettingReady, 10);
     const { removeBackground } = await getSegmentationModule();
     
-    setStatus("Detecting foreground...", 20);
+    setStatus(FRIENDLY_STATUS.applyingEffect, 20);
     const sourceImage = await loadImageElementFromBlob(state.current.blob);
     
     // Get foreground mask
@@ -187,12 +188,12 @@ export async function applySelectiveBlur(commitBlobCallback) {
       },
       progress(key, current, total) {
         const ratio = total > 0 ? Math.round((current / total) * 100) : 0;
-        const phase = String(key).includes("download") ? "Downloading model" : "Detecting foreground";
-        setStatus(`${phase}... ${ratio}%`, 10 + ratio * 0.3);
+        const phase = progressMessage({ key });
+        setStatus(`${phase} ${ratio}%`, 10 + ratio * 0.3);
       },
     });
     
-    setStatus("Creating blur effect...", 50);
+    setStatus(FRIENDLY_STATUS.applyingEffect, 50);
     
     // Create canvas for compositing
     const canvas = document.createElement("canvas");
@@ -208,13 +209,13 @@ export async function applySelectiveBlur(commitBlobCallback) {
     ctx.drawImage(sourceImage, 0, 0);
     const originalData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     
-    setStatus("Applying blur to background...", 60);
+    setStatus(FRIENDLY_STATUS.applyingEffect, 60);
     
     // Apply blur
     const blurRadius = Number(dom.blurIntensity.value);
     const blurredData = applyGaussianBlur(originalData, blurRadius);
     
-    setStatus("Loading mask...", 75);
+    setStatus(FRIENDLY_STATUS.gettingReady, 75);
     
     // Load mask
     const maskImage = await loadImageElementFromBlob(maskBlob);
@@ -230,7 +231,7 @@ export async function applySelectiveBlur(commitBlobCallback) {
     maskCtx.drawImage(maskImage, 0, 0, canvas.width, canvas.height);
     const maskData = maskCtx.getImageData(0, 0, canvas.width, canvas.height);
     
-    setStatus("Compositing layers...", 85);
+    setStatus(FRIENDLY_STATUS.compositing, 85);
     
     // Composite: use original where mask is opaque, blurred where transparent
     const finalData = ctx.createImageData(canvas.width, canvas.height);
@@ -256,7 +257,7 @@ export async function applySelectiveBlur(commitBlobCallback) {
     
     ctx.putImageData(finalData, 0, 0);
     
-    setStatus("Encoding image...", 95);
+    setStatus(FRIENDLY_STATUS.savingChanges, 95);
     
     const mime = MIME_BY_FORMAT[state.current.format] || "image/png";
     const quality = state.current.format === "png" ? undefined : currentQuality();
@@ -313,7 +314,7 @@ async function initializeBlurPreview() {
   blurCache.isProcessing = true;
   
   try {
-    setStatus("Detecting foreground for preview...", 10);
+    setStatus(FRIENDLY_STATUS.preparingPreview, 10);
     const { removeBackground } = await getSegmentationModule();
     const sourceImage = await loadImageElementFromBlob(state.current.blob);
     
@@ -326,12 +327,12 @@ async function initializeBlurPreview() {
       },
       progress(key, current, total) {
         const ratio = total > 0 ? Math.round((current / total) * 100) : 0;
-        const phase = String(key).includes("download") ? "Downloading model" : "Detecting foreground";
-        setStatus(`${phase}... ${ratio}%`, 10 + ratio * 0.5);
+        const phase = progressMessage({ key, defaultPhase: FRIENDLY_STATUS.preparingPreview });
+        setStatus(`${phase} ${ratio}%`, 10 + ratio * 0.5);
       },
     });
     
-    setStatus("Preparing preview...", 70);
+    setStatus(FRIENDLY_STATUS.preparingPreview, 70);
     
     // Create canvas and get original data
     const canvas = document.createElement("canvas");
@@ -367,14 +368,14 @@ async function initializeBlurPreview() {
     blurCache.previewCanvas = canvas;
     blurCache.blurredDataCache.clear();
     
-    setStatus("Preview ready", 100);
+    setStatus("Preview ready.", 100);
     
     // Trigger initial preview
     await updateBlurPreview();
     
   } catch (error) {
     console.error("Failed to initialize blur preview:", error);
-    setStatus("Preview initialization failed", 0);
+    setStatus("Couldn’t prepare preview.", 0);
   } finally {
     blurCache.isProcessing = false;
   }

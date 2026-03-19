@@ -1,8 +1,10 @@
 import { state } from "./core/state.js";
 import { dom } from "./core/dom.js";
 import { createImageState, setBusy, setStatus, revokeUrl, loadImageElementFromBlob } from "./core/utils.js";
+import { FRIENDLY_STATUS } from "./core/messages.js";
 import { destroyCropper } from "./tools/crop.js";
 import { clearBlurCache } from "./tools/selective-blur.js";
+import { tvoDestroy } from "./tools/text-overlay.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -24,6 +26,37 @@ export function clearHistory() {
     if (entry.snapshot?.previewUrl) revokeUrl(entry.snapshot.previewUrl);
   });
   state.history = [];
+}
+
+export function discardImage() {
+  // Drop any in-flight operation UI state
+  setBusy(false);
+
+  // Tool cleanups
+  destroyCropper();
+  clearBlurCache();
+  tvoDestroy();
+
+  // Revoke object URLs
+  if (state.current?.previewUrl) revokeUrl(state.current.previewUrl);
+  clearHistory();
+
+  // Reset state
+  state.current = null;
+  state.original = null;
+  state.busy = false;
+
+  // Reset UI
+  dom.editorPanel.classList.add("is-hidden");
+  dom.dropzone.classList.remove("has-image");
+  dom.cropImage.src = "";
+  dom.previewImage.src = "";
+  dom.fileName.textContent = "No file loaded";
+  dom.metaDimensions.textContent = "-";
+  dom.metaFormat.textContent = "-";
+  dom.metaSize.textContent = "-";
+  dom.metaHistory.textContent = "0 steps";
+  setStatus("Choose an image to start.", 0);
 }
 
 export async function setImageState(nextImage, renderCallback) {
@@ -59,7 +92,7 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
   }
 
   setBusy(true);
-  setStatus("Loading image locally...", 18);
+  setStatus(FRIENDLY_STATUS.loadingImage, 18);
 
   try {
     const image = await loadImageElementFromBlob(file);
@@ -74,10 +107,10 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
     });
     switchToEditorCallback();
     await setImageState(state.original, renderCallback);
-    setStatus("Image ready. All edits stay in the browser.", 100);
+    setStatus("Image ready.", 100);
   } catch (error) {
     console.error(error);
-    setStatus("This file could not be decoded in the browser.", 0);
+    setStatus("Couldn’t open this image.", 0);
   } finally {
     setBusy(false);
   }
@@ -102,11 +135,11 @@ export function resetToOriginal(renderCallback, syncUndoCallback) {
   if (!state.original || state.busy) return;
   setBusy(true);
   clearHistory();
-  setStatus("Restoring original image...", 30);
+  setStatus("Restoring original…", 30);
 
   setImageState(state.original, renderCallback)
     .then(() => {
-      setStatus("Original image restored.", 100);
+      setStatus("Restored.", 100);
     })
     .finally(() => {
       setBusy(false);

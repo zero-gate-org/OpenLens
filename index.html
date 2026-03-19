@@ -231,6 +231,15 @@
           <div class="editor-body">
             <!-- Left: canvas -->
             <div class="canvas-area">
+              <button
+                id="discard-image"
+                class="canvas-discard-btn"
+                type="button"
+                aria-label="Discard image"
+                title="Discard image"
+              >
+                ×
+              </button>
               <div class="crop-surface">
                 <img id="crop-image" alt="Editable image" />
               </div>
@@ -445,9 +454,9 @@
 
                   <div class="sidebar-section-label">Foreground Layer</div>
                   <div id="tvo-fg-status" class="tvo-hint">
-                    Foreground will be detected automatically when you enter this tool.
+                    We’ll prepare the cutout automatically when you open this tool.
                   </div>
-                  <button id="tvo-load-fg" class="btn btn-ghost btn-full" type="button" style="margin-top:4px;">Re-detect Foreground</button>
+                  <button id="tvo-load-fg" class="btn btn-ghost btn-full" type="button" style="margin-top:4px;">Rebuild Cutout</button>
 
                   <div class="sidebar-section-label">Layer Order</div>
                   <div id="tvo-layer-panel" class="layer-panel">

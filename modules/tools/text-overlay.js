@@ -1,6 +1,7 @@
 import { state } from "../core/state.js";
 import { dom } from "../core/dom.js";
 import { setBusy, setStatus, loadImageElementFromBlob, canvasToBlob, renameExtension } from "../core/utils.js";
+import { FRIENDLY_STATUS, progressMessage } from "../core/messages.js";
 import { getBackgroundRemovalModule } from "./background-removal.js";
 import { destroyCropper } from "./crop.js";
 import { pushHistory } from "../file-handler.js";
@@ -53,8 +54,8 @@ export async function tvoInitAsync(syncUndoCallback) {
   const originalBlob = state.original ? state.original.blob : state.current.blob;
 
   if (!tvoHasTransparentForeground()) {
-    setStatus("Detecting foreground object...", 10);
-    dom.tvoFgStatus.textContent = "Automatically detecting foreground object...";
+    setStatus(FRIENDLY_STATUS.gettingReady, 10);
+    dom.tvoFgStatus.textContent = "Preparing your cutout…";
     dom.tvoFgStatus.style.color = "var(--accent)";
 
     try {
@@ -63,8 +64,8 @@ export async function tvoInitAsync(syncUndoCallback) {
         model: dom.bgModel?.value || "medium",
         progress(key, current, total) {
           const ratio = total > 0 ? Math.round((current / total) * 100) : 0;
-          const phase = String(key).includes("download") ? "Downloading model" : "Detecting foreground";
-          setStatus(`${phase}... ${ratio}%`, ratio);
+          const phase = progressMessage({ key });
+          setStatus(`${phase} ${ratio}%`, ratio);
         },
       });
 
@@ -77,11 +78,11 @@ export async function tvoInitAsync(syncUndoCallback) {
         height: image.naturalHeight,
       });
       pushHistory("Foreground detection");
-      setStatus("Foreground detected. Setting up editor...", 60);
+      setStatus("Ready.", 60);
     } catch (err) {
       console.error(err);
-      setStatus("Foreground detection failed. Using original image.", 0);
-      dom.tvoFgStatus.textContent = "Detection failed. Proceeding with original image.";
+      setStatus("Couldn’t prepare cutout. Using original image.", 0);
+      dom.tvoFgStatus.textContent = "Couldn’t prepare cutout. Using original image.";
       dom.tvoFgStatus.style.color = "var(--danger)";
     }
   }
@@ -170,7 +171,7 @@ export async function tvoInitAsync(syncUndoCallback) {
 
   tvoUpdateFgStatus();
   tvoBuildLayerPanel();
-  setStatus("Text Behind Object ready. Drag text to position, reorder layers below.", 100);
+  setStatus("Ready. Drag text to position, reorder layers below.", 100);
 
   setBusy(false);
   syncUndoCallback();
@@ -211,10 +212,10 @@ function tvoOnResize(syncUndoCallback) {
 export function tvoUpdateFgStatus() {
   if (!state.current) return;
   if (tvoHasTransparentForeground()) {
-    dom.tvoFgStatus.textContent = "Foreground object detected. Drag text to position, reorder layers below.";
+    dom.tvoFgStatus.textContent = "Cutout ready. Drag text to position, reorder layers below.";
     dom.tvoFgStatus.style.color = "var(--accent)";
   } else {
-    dom.tvoFgStatus.textContent = "Foreground will be detected automatically when you enter this tool.";
+    dom.tvoFgStatus.textContent = "We’ll prepare the cutout automatically when you open this tool.";
     dom.tvoFgStatus.style.color = "var(--muted)";
   }
 }
@@ -224,8 +225,8 @@ export async function tvoLoadForeground(syncUndoCallback) {
 
   tvoDestroy();
   setBusy(true);
-  setStatus("Re-detecting foreground object...", 10);
-  dom.tvoFgStatus.textContent = "Re-detecting foreground object...";
+  setStatus(FRIENDLY_STATUS.gettingReady, 10);
+  dom.tvoFgStatus.textContent = "Rebuilding cutout…";
 
   try {
     const { removeBackground } = await getBackgroundRemovalModule();
@@ -233,8 +234,8 @@ export async function tvoLoadForeground(syncUndoCallback) {
       model: dom.bgModel?.value || "medium",
       progress(key, current, total) {
         const ratio = total > 0 ? Math.round((current / total) * 100) : 0;
-        const phase = String(key).includes("download") ? "Downloading model" : "Detecting foreground";
-        setStatus(`${phase}... ${ratio}%`, ratio);
+        const phase = progressMessage({ key });
+        setStatus(`${phase} ${ratio}%`, ratio);
       },
     });
 
@@ -250,13 +251,13 @@ export async function tvoLoadForeground(syncUndoCallback) {
     });
     pushHistory("Foreground re-detection");
 
-    setStatus("Foreground re-detected. Setting up editor...", 70);
+    setStatus("Ready.", 70);
     setBusy(false);
     await tvoInitAsync(syncUndoCallback);
   } catch (err) {
     console.error(err);
-    setStatus("Foreground re-detection failed.", 0);
-    dom.tvoFgStatus.textContent = "Re-detection failed. Try again.";
+    setStatus("Couldn’t rebuild cutout. Try again.", 0);
+    dom.tvoFgStatus.textContent = "Couldn’t rebuild cutout. Try again.";
     dom.tvoFgStatus.style.color = "var(--danger)";
     setBusy(false);
     syncUndoCallback();
@@ -418,7 +419,7 @@ function tvoToggleLayerVisibility(index) {
 export async function tvoApply(commitBlobCallback) {
   if (!state.fabricCanvas || !state.current) return;
 
-  setStatus("Compositing layers...", 30);
+  setStatus(FRIENDLY_STATUS.compositing, 30);
 
   try {
     const origW = state.original ? state.original.width : state.current.width;
@@ -447,10 +448,10 @@ export async function tvoApply(commitBlobCallback) {
     await commitBlobCallback(blob, "Text Behind Object", nextName);
     state.tvoForegroundReady = false;
 
-    setStatus("Text behind object applied.", 100);
+    setStatus("Applied.", 100);
   } catch (err) {
     console.error(err);
-    setStatus("Failed to apply text behind object.", 0);
+    setStatus("Couldn’t apply changes.", 0);
   }
 }
 

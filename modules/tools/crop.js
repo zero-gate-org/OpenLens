@@ -2,6 +2,7 @@ import { state, MIME_BY_FORMAT } from "../core/state.js";
 import { dom } from "../core/dom.js";
 import { withOperation, setStatus, currentQuality, canvasToBlob } from "../core/utils.js";
 import { syncUndoButtons } from "../ui-controller.js";
+import { FRIENDLY_STATUS } from "../core/messages.js";
 
 export function destroyCropper() {
   if (state.cropper) {
@@ -57,13 +58,14 @@ export async function applyCrop(commitBlobCallback) {
   if (!state.cropper || !state.current) return;
 
   await withOperation("Crop", async () => {
-    setStatus("Cropping image...", 35);
+    setStatus("Cropping…", 35);
     const canvas = state.cropper.getCroppedCanvas({
       imageSmoothingEnabled: true,
       imageSmoothingQuality: "high",
     });
     const mime = MIME_BY_FORMAT[state.current.format] || "image/png";
     const quality = state.current.format === "png" ? undefined : currentQuality();
+    setStatus(FRIENDLY_STATUS.savingChanges, 80);
     const blob = await canvasToBlob(canvas, mime, quality);
     await commitBlobCallback(blob, "Crop", state.current.name);
   }, syncUndoButtons);

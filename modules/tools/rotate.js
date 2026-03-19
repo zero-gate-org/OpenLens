@@ -2,12 +2,13 @@ import { state, MIME_BY_FORMAT } from "../core/state.js";
 import { dom } from "../core/dom.js";
 import { withOperation, setStatus, currentQuality, canvasToBlob, loadImageElementFromBlob } from "../core/utils.js";
 import { syncUndoButtons } from "../ui-controller.js";
+import { FRIENDLY_STATUS } from "../core/messages.js";
 
 export async function rotateBy(degrees, commitBlobCallback) {
   if (!state.current) return;
 
   await withOperation(`Rotate ${degrees}°`, async () => {
-    setStatus(`Rotating ${degrees}°...`, 24);
+    setStatus("Rotating…", 24);
     const image = await loadImageElementFromBlob(state.current.blob);
     const radians = (degrees * Math.PI) / 180;
     const normalized = ((degrees % 360) + 360) % 360;
@@ -34,6 +35,7 @@ export async function rotateBy(degrees, commitBlobCallback) {
 
     const mime = MIME_BY_FORMAT[state.current.format] || "image/png";
     const quality = state.current.format === "png" ? undefined : currentQuality();
+    setStatus(FRIENDLY_STATUS.savingChanges, 80);
     const blob = await canvasToBlob(canvas, mime, quality);
     await commitBlobCallback(blob, "Rotate", state.current.name);
   }, syncUndoButtons);

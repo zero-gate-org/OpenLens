@@ -3,7 +3,7 @@ import { state } from "./modules/core/state.js";
 import { dom } from "./modules/core/dom.js";
 
 // File handling
-import { loadFile, commitBlob, undo, resetToOriginal, downloadCurrent } from "./modules/file-handler.js";
+import { loadFile, commitBlob, undo, resetToOriginal, downloadCurrent, discardImage } from "./modules/file-handler.js";
 
 // UI controller
 import { 
@@ -95,6 +95,12 @@ function initHistoryHandlers() {
   });
 
   dom.downloadButton.addEventListener("click", downloadCurrent);
+
+  dom.discardImage?.addEventListener("click", () => {
+    if (state.busy) return;
+    discardImage();
+    syncUndoButtons();
+  });
 }
 
 // Initialize all tool listeners

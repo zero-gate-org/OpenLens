@@ -2,6 +2,7 @@ import { state, MIME_BY_FORMAT } from "../core/state.js";
 import { dom } from "../core/dom.js";
 import { withOperation, setStatus, currentQuality, canvasToBlob, loadImageElementFromBlob, renameExtension } from "../core/utils.js";
 import { syncUndoButtons } from "../ui-controller.js";
+import { FRIENDLY_STATUS } from "../core/messages.js";
 
 export async function applyConvert(commitBlobCallback) {
   if (!state.current) return;
@@ -10,7 +11,7 @@ export async function applyConvert(commitBlobCallback) {
     const targetFormat = dom.formatSelect.value;
     const targetMime = MIME_BY_FORMAT[targetFormat];
     const quality = targetFormat === "png" ? undefined : currentQuality();
-    setStatus(`Encoding ${targetFormat.toUpperCase()} locally...`, 34);
+    setStatus(FRIENDLY_STATUS.savingChanges, 34);
 
     const image = await loadImageElementFromBlob(state.current.blob);
     const canvas = document.createElement("canvas");

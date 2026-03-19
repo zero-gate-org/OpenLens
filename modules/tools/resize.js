@@ -2,6 +2,7 @@ import { state, MIME_BY_FORMAT } from "../core/state.js";
 import { dom } from "../core/dom.js";
 import { withOperation, setStatus, currentQuality, canvasToBlob, loadImageElementFromBlob } from "../core/utils.js";
 import { syncUndoButtons } from "../ui-controller.js";
+import { FRIENDLY_STATUS } from "../core/messages.js";
 
 export function syncLockedDimensions(from) {
   if (!state.current || !dom.lockRatio.checked) return;
@@ -34,10 +35,10 @@ export async function applyResize(commitBlobCallback) {
   }
 
   await withOperation("Resize", async () => {
-    setStatus("Loading image...", 20);
+    setStatus(FRIENDLY_STATUS.loadingImage, 20);
     const sourceImage = await loadImageElementFromBlob(state.current.blob);
     
-    setStatus("Resizing image...", 40);
+    setStatus("Resizing…", 40);
     
     // Create destination canvas with target dimensions
     const canvas = document.createElement("canvas");
@@ -56,14 +57,14 @@ export async function applyResize(commitBlobCallback) {
     // Draw the resized image
     ctx.drawImage(sourceImage, 0, 0, width, height);
     
-    setStatus("Encoding image...", 70);
+    setStatus(FRIENDLY_STATUS.savingChanges, 70);
     
     // Convert to blob
     const mime = MIME_BY_FORMAT[state.current.format] || "image/png";
     const quality = state.current.format === "png" ? undefined : currentQuality();
     const blob = await canvasToBlob(canvas, mime, quality);
     
-    setStatus("Finalizing...", 90);
+    setStatus(FRIENDLY_STATUS.finishingUp, 90);
     await commitBlobCallback(blob, "Resize", state.current.name);
   }, syncUndoButtons);
 }
