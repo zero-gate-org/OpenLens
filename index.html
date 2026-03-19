@@ -123,6 +123,16 @@
               </div>
             </button>
 
+            <button class="tool-card" data-select-tool="blur" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4m-2.93-7.07l-2.83 2.83m-8.48 8.48l-2.83 2.83m14.14 0l-2.83-2.83m-8.48-8.48l-2.83-2.83"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Selective Blur</span>
+                <span class="tool-card-desc">Fake bokeh effect</span>
+              </div>
+            </button>
+
             <button class="tool-card" data-select-tool="textoverlay" type="button">
               <div class="tool-card-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
@@ -247,6 +257,7 @@
                   <option value="rotate">Rotate</option>
                   <option value="convert">Convert</option>
                   <option value="bgremove">BG Remove</option>
+                  <option value="blur">Selective Blur</option>
                   <option value="textoverlay">Text Behind Object</option>
                 </select>
               </div>
@@ -333,6 +344,34 @@
                     </select>
                   </label>
                   <button id="remove-background" class="btn btn-accent btn-full" type="button">Remove Background</button>
+                </div>
+
+                <div class="sidebar-panel" data-panel="blur">
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Model</span>
+                    <select id="blur-model" class="sidebar-select">
+                      <option value="small">Small (fast)</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="large">Large (best)</option>
+                    </select>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Blur Intensity</span>
+                    <div class="sidebar-range-row">
+                      <input id="blur-intensity" class="sidebar-range" type="range" min="2" max="50" step="1" value="15" />
+                      <output id="blur-intensity-val" class="sidebar-range-value" for="blur-intensity">15px</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Adjust slider to preview blur effect in real-time</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Edge Feather</span>
+                    <div class="sidebar-range-row">
+                      <input id="blur-feather" class="sidebar-range" type="range" min="0" max="20" step="1" value="5" />
+                      <output id="blur-feather-val" class="sidebar-range-value" for="blur-feather">5px</output>
+                    </div>
+                    <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Smooths transition between sharp and blurred areas</small>
+                  </label>
+                  <button id="apply-blur" class="btn btn-accent btn-full" type="button">Apply Blur</button>
                 </div>
 
                 <div class="sidebar-panel" data-panel="textoverlay">

@@ -3,6 +3,7 @@ import { dom } from "./core/dom.js";
 import { formatBytes } from "./core/utils.js";
 import { destroyCropper, ensureCropper } from "./tools/crop.js";
 import { tvoDestroy, tvoInitAsync, tvoUpdateFgStatus } from "./tools/text-overlay.js";
+import { activateBlurTool, deactivateBlurTool, clearBlurCache } from "./tools/selective-blur.js";
 
 export function syncUndoButtons() {
   const disabled = !state.current || state.busy;
@@ -31,6 +32,7 @@ export async function renderCurrentImage(toolSwitcher) {
 
   if (!isTextoverlayActive) {
     destroyCropper();
+    deactivateBlurTool();
     await new Promise((resolve, reject) => {
       dom.cropImage.onload = resolve;
       dom.cropImage.onerror = reject;
@@ -38,8 +40,10 @@ export async function renderCurrentImage(toolSwitcher) {
     });
     fitCanvasToImagePreview();
     if (toolSwitcher?.value === "crop") ensureCropper();
+    if (toolSwitcher?.value === "blur") await activateBlurTool();
   } else {
     tvoDestroy();
+    deactivateBlurTool();
     fitCanvasToImagePreview();
     tvoUpdateFgStatus();
     await tvoInitAsync(syncUndoButtons);
@@ -77,6 +81,7 @@ export async function activateTool(tool) {
     if (toolSwitcher.value !== tool) toolSwitcher.value = tool;
     dom.cropSurface.style.display = "none";
     tvoDestroy();
+    deactivateBlurTool();
     if (state.current) {
       await tvoInitAsync(syncUndoButtons);
     }
@@ -93,10 +98,17 @@ export async function activateTool(tool) {
   if (toolSwitcher.value !== tool) toolSwitcher.value = tool;
 
   if (tool === "crop") {
+    deactivateBlurTool();
     fitCanvasToImagePreview();
     ensureCropper();
+  } else if (tool === "blur") {
+    destroyCropper();
+    if (state.current) {
+      await activateBlurTool();
+    }
   } else {
     destroyCropper();
+    deactivateBlurTool();
   }
 }
 

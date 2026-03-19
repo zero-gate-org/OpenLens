@@ -2,6 +2,7 @@ import { state } from "./core/state.js";
 import { dom } from "./core/dom.js";
 import { createImageState, setBusy, setStatus, revokeUrl, loadImageElementFromBlob } from "./core/utils.js";
 import { destroyCropper } from "./tools/crop.js";
+import { clearBlurCache } from "./tools/selective-blur.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -63,6 +64,7 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
   try {
     const image = await loadImageElementFromBlob(file);
     destroyCropper();
+    clearBlurCache();
     clearHistory();
     state.original = createImageState({
       blob: file,
