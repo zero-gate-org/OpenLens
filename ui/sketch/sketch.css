@@ -1,0 +1,141 @@
+/* ========================================
+   SKETCH / PENCIL DRAWING EFFECT
+   ======================================== */
+
+/* Mode selector (segmented button group) */
+.sketch-mode-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.sketch-mode-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+  appearance: none;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 4px;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  letter-spacing: var(--tracking-tight);
+  transition: all 160ms ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.sketch-mode-btn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sketch-mode-btn.active {
+  color: var(--accent);
+  background: rgba(171, 255, 203, 0.1);
+  border-color: rgba(171, 255, 203, 0.25);
+}
+
+/* Hidden native radio inputs */
+.sketch-mode-radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+/* Color picker row */
+.sketch-color-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sketch-color-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.sketch-color-swatch-label {
+  font-size: 0.6rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Presets */
+.sketch-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sketch-preset-btn {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 4px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+  transition: border-color 160ms ease, transform 120ms ease, background 160ms ease;
+  height: 28px;
+}
+
+.sketch-preset-btn:hover {
+  border-color: var(--accent);
+  background: rgba(171, 255, 203, 0.06);
+  transform: translateY(-1px);
+}
+
+.sketch-preset-btn:active {
+  transform: translateY(0);
+}
+
+.sketch-preset-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.sketch-preset-btn:hover .sketch-preset-label {
+  color: var(--text);
+}
+
+/* Conditional visibility rows */
+.sketch-blend-row,
+.sketch-hatch-row {
+  display: none;
+}
+
+/* Section divider */
+.sketch-section-divider {
+  height: 1px;
+  background: var(--line);
+  margin: 6px 0;
+}
+
+/* Actions row */
+.sketch-actions-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.sketch-actions-row .btn {
+  flex: 1;
+}

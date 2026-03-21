@@ -34,6 +34,7 @@ import { initGlitchListeners } from "./modules/tools/glitch.js";
 import { initFilmGrainListeners } from "./modules/tools/film-grain.js";
 import { initLomoListeners } from "./modules/tools/lomo.js";
 import { initOilPaintListeners } from "./modules/tools/oil-paint.js";
+import { initSketchListeners } from "./modules/tools/sketch.js";
 
 // Wrapper for commitBlob that includes rendering
 async function commitBlobWithRender(blob, label, name) {
@@ -134,6 +135,7 @@ function initToolListeners() {
   initFilmGrainListeners(commitBlobWithRender);
   initLomoListeners(commitBlobWithRender);
   initOilPaintListeners(commitBlobWithRender);
+  initSketchListeners(commitBlobWithRender);
 }
 
 // Initialize the application
