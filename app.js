@@ -32,6 +32,7 @@ import { initHalftoneListeners } from "./modules/tools/halftone.js";
 import { initChromaticAberrationListeners } from "./modules/tools/chromatic-aberration.js";
 import { initGlitchListeners } from "./modules/tools/glitch.js";
 import { initFilmGrainListeners } from "./modules/tools/film-grain.js";
+import { initLomoListeners } from "./modules/tools/lomo.js";
 
 // Wrapper for commitBlob that includes rendering
 async function commitBlobWithRender(blob, label, name) {
@@ -130,6 +131,7 @@ function initToolListeners() {
   initChromaticAberrationListeners(commitBlobWithRender);
   initGlitchListeners(commitBlobWithRender);
   initFilmGrainListeners(commitBlobWithRender);
+  initLomoListeners(commitBlobWithRender);
 }
 
 // Initialize the application

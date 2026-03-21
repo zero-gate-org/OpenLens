@@ -181,4 +181,18 @@ export const dom = {
   fgPresets: document.querySelector("#fg-presets"),
   fgApply: document.querySelector("#fg-apply"),
   fgReset: document.querySelector("#fg-reset"),
+  // Lomo / Cross-Process
+  lomoPresets: document.querySelector("#lomo-presets"),
+  lomoSaturation: document.querySelector("#lomo-saturation"),
+  lomoSaturationValue: document.querySelector("#lomo-saturation-val"),
+  lomoVignette: document.querySelector("#lomo-vignette"),
+  lomoVignetteValue: document.querySelector("#lomo-vignette-val"),
+  lomoWarmth: document.querySelector("#lomo-warmth"),
+  lomoWarmthValue: document.querySelector("#lomo-warmth-val"),
+  lomoIntensity: document.querySelector("#lomo-intensity"),
+  lomoIntensityValue: document.querySelector("#lomo-intensity-val"),
+  lomoCurveCanvas: document.querySelector("#lomo-curve-canvas"),
+  lomoCurveChannelLabel: document.querySelector("#lomo-curve-channel-label"),
+  lomoApply: document.querySelector("#lomo-apply"),
+  lomoReset: document.querySelector("#lomo-reset"),
 };

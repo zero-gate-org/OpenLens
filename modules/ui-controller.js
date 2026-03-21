@@ -13,6 +13,7 @@ import { activateHalftoneTool, deactivateHalftoneTool } from "./tools/halftone.j
 import { activateChromaticAberrationTool, deactivateChromaticAberrationTool } from "./tools/chromatic-aberration.js";
 import { activateGlitchTool, deactivateGlitchTool } from "./tools/glitch.js";
 import { activateFilmGrainTool, deactivateFilmGrainTool } from "./tools/film-grain.js";
+import { activateLomoTool, deactivateLomoTool, clearLomoCache } from "./tools/lomo.js";
 
 export function syncUndoButtons() {
   const disabled = !state.current || state.busy;
@@ -60,6 +61,7 @@ export async function renderCurrentImage(toolSwitcher) {
     if (toolSwitcher?.value === "chromaticaberration") await activateChromaticAberrationTool();
     if (toolSwitcher?.value === "glitch") await activateGlitchTool();
     if (toolSwitcher?.value === "filmgrain") await activateFilmGrainTool();
+    if (toolSwitcher?.value === "lomo") await activateLomoTool();
   } else {
     tvoDestroy();
     deactivateBlurTool();
@@ -113,6 +115,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await tvoInitAsync(syncUndoButtons);
     }
@@ -139,6 +142,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     fitCanvasToImagePreview();
     ensureCropper();
   } else if (tool === "blur") {
@@ -152,6 +156,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateBlurTool();
     }
@@ -166,6 +171,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateTiltShiftTool();
     }
@@ -180,6 +186,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateSplashTool();
     }
@@ -194,6 +201,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateShadowTool();
     }
@@ -208,6 +216,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateDuotoneTool();
     }
@@ -222,6 +231,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateGradientMapTool();
     }
@@ -236,6 +246,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateHalftoneTool();
     }
@@ -250,6 +261,7 @@ export async function activateTool(tool) {
     deactivateHalftoneTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateChromaticAberrationTool();
     }
@@ -264,6 +276,7 @@ export async function activateTool(tool) {
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateGlitchTool();
     }
@@ -278,8 +291,24 @@ export async function activateTool(tool) {
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
+    deactivateLomoTool();
     if (state.current) {
       await activateFilmGrainTool();
+    }
+  } else if (tool === "lomo") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateGradientMapTool();
+    deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
+    deactivateGlitchTool();
+    deactivateFilmGrainTool();
+    if (state.current) {
+      await activateLomoTool();
     }
   } else {
     destroyCropper();
@@ -293,6 +322,7 @@ export async function activateTool(tool) {
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     deactivateFilmGrainTool();
+    deactivateLomoTool();
   }
 }
 
