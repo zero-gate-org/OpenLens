@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="./ui/film-grain/film-grain.css" />
     <link rel="stylesheet" href="./ui/gradientmap/gradient-map.css" />
     <link rel="stylesheet" href="./ui/lomo/lomo.css" />
+    <link rel="stylesheet" href="./ui/oil-paint/oil-paint.css" />
   </head>
   <body>
     <div class="app" data-view="landing">
@@ -247,6 +248,15 @@
                 <span class="tool-card-desc">Retro analog color grading</span>
               </div>
             </button>
+            <button class="tool-card" data-select-tool="oilpaint" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.75-.1 2.6-.3"/><path d="M18.4 7.4l-2.8 2.8"/><path d="M15.6 10.2l4.2-4.2"/><circle cx="19" cy="5" r="2"/><path d="M9 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3-3-1.3-3-3z" fill="currentColor" opacity="0.2"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Oil Paint</span>
+                <span class="tool-card-desc">Kuwahara painterly effect</span>
+              </div>
+            </button>
           </div>
         </section>
 
@@ -383,6 +393,7 @@
                   <option value="glitch">Glitch Art</option>
                   <option value="filmgrain">Film Grain</option>
                   <option value="lomo">Lomo / Cross-Process</option>
+                  <option value="oilpaint">Oil Paint</option>
                 </select>
               </div>
 
@@ -1060,6 +1071,76 @@
                   <div class="sidebar-row" style="margin-top:4px;">
                     <button id="lomo-reset" class="btn btn-ghost btn-full" type="button">Reset</button>
                     <button id="lomo-apply" class="btn btn-accent btn-full" type="button">Apply</button>
+                  </div>
+                </div>
+
+                <div class="sidebar-panel" data-panel="oilpaint">
+                  <div class="sidebar-section-label">Algorithm</div>
+                  <div class="op-mode-group">
+                    <label class="op-mode-btn active" data-mode="standard">
+                      <input class="op-mode-radio" type="radio" name="op-mode" value="standard" checked />
+                      Standard (Fast)
+                    </label>
+                    <label class="op-mode-btn" data-mode="generalized">
+                      <input class="op-mode-radio" type="radio" name="op-mode" value="generalized" />
+                      Smooth (Generalized)
+                    </label>
+                  </div>
+
+                  <div class="op-preview-note">Preview at reduced resolution — Apply uses full image.</div>
+
+                  <div class="sidebar-section-label">Brush Settings</div>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Brush Radius</span>
+                    <div class="sidebar-range-row">
+                      <input id="op-radius" class="sidebar-range" type="range" min="2" max="15" step="1" value="4" />
+                      <output id="op-radius-val" class="sidebar-range-value" for="op-radius">4px</output>
+                    </div>
+                    <small style="color:#888;font-size:11px;margin-top:4px;display:block;">Affects visible brush stroke size</small>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Passes</span>
+                    <div class="sidebar-range-row">
+                      <input id="op-passes" class="sidebar-range" type="range" min="1" max="4" step="1" value="1" />
+                      <output id="op-passes-val" class="sidebar-range-value" for="op-passes">1</output>
+                    </div>
+                  </label>
+                  <div class="op-pass-warning">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y1="16"/></svg>
+                    High abstraction — 3+ passes may significantly abstract the image.
+                  </div>
+                  <label class="sidebar-field op-sectors-field" style="display:none;">
+                    <span class="sidebar-label">Sector Count</span>
+                    <div class="sidebar-range-row">
+                      <input id="op-sectors" class="sidebar-range" type="range" min="4" max="16" step="1" value="8" />
+                      <output id="op-sectors-val" class="sidebar-range-value" for="op-sectors">8</output>
+                    </div>
+                    <small style="color:#888;font-size:11px;margin-top:4px;display:block;">More sectors = smoother strokes</small>
+                  </label>
+
+                  <div class="sidebar-section-label">Enhancements</div>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Color Boost</span>
+                    <div class="sidebar-range-row">
+                      <input id="op-sat-boost" class="sidebar-range" type="range" min="0" max="100" step="1" value="0" />
+                      <output id="op-sat-boost-val" class="sidebar-range-value" for="op-sat-boost">0%</output>
+                    </div>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Edge Sharpening</span>
+                    <div class="sidebar-range-row">
+                      <input id="op-edge-sharpen" class="sidebar-range" type="range" min="0" max="100" step="1" value="0" />
+                      <output id="op-edge-sharpen-val" class="sidebar-range-value" for="op-edge-sharpen">0%</output>
+                    </div>
+                  </label>
+
+                  <div class="sidebar-section-label">Presets</div>
+                  <div id="op-presets" class="op-presets"></div>
+
+                  <div class="op-actions-row">
+                    <button id="op-reset" class="btn btn-ghost btn-full" type="button">Reset</button>
+                    <button id="op-cancel" class="btn btn-ghost btn-full op-cancel-btn" type="button">Cancel</button>
+                    <button id="op-apply" class="btn btn-accent btn-full" type="button">Apply</button>
                   </div>
                 </div>
 
