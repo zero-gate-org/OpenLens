@@ -10,6 +10,7 @@ import { clearSplashCache } from "./tools/color-splash.js";
 import { clearShadowCache } from "./tools/shadow-injection.js";
 import { clearDuotoneCache } from "./tools/duotone.js";
 import { clearHalftoneCache } from "./tools/halftone.js";
+import { clearChromaticAberrationCache } from "./tools/chromatic-aberration.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -45,6 +46,7 @@ export function discardImage() {
   clearShadowCache();
   clearDuotoneCache();
   clearHalftoneCache();
+  clearChromaticAberrationCache();
   tvoDestroy();
 
   // Revoke object URLs
@@ -111,9 +113,10 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
     clearTiltShiftCache();
     clearSplashCache();
     clearShadowCache();
-    clearDuotoneCache();
-    clearHalftoneCache();
-    clearHistory();
+  clearDuotoneCache();
+  clearHalftoneCache();
+  clearChromaticAberrationCache();
+  clearHistory();
     state.original = createImageState({
       blob: file,
       name: file.name || "image.png",

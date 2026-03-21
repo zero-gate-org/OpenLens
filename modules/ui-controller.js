@@ -9,6 +9,7 @@ import { activateSplashTool, deactivateSplashTool, clearSplashCache } from "./to
 import { activateShadowTool, deactivateShadowTool, clearShadowCache } from "./tools/shadow-injection.js";
 import { activateDuotoneTool, deactivateDuotoneTool, clearDuotoneCache } from "./tools/duotone.js";
 import { activateHalftoneTool, deactivateHalftoneTool } from "./tools/halftone.js";
+import { activateChromaticAberrationTool, deactivateChromaticAberrationTool } from "./tools/chromatic-aberration.js";
 
 export function syncUndoButtons() {
   const disabled = !state.current || state.busy;
@@ -52,6 +53,7 @@ export async function renderCurrentImage(toolSwitcher) {
     if (toolSwitcher?.value === "shadowinjection") await activateShadowTool();
     if (toolSwitcher?.value === "duotone") await activateDuotoneTool();
     if (toolSwitcher?.value === "halftone") await activateHalftoneTool();
+    if (toolSwitcher?.value === "chromaticaberration") await activateChromaticAberrationTool();
   } else {
     tvoDestroy();
     deactivateBlurTool();
@@ -101,6 +103,7 @@ export async function activateTool(tool) {
     deactivateShadowTool();
     deactivateDuotoneTool();
     deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
     if (state.current) {
       await tvoInitAsync(syncUndoButtons);
     }
@@ -123,6 +126,7 @@ export async function activateTool(tool) {
     deactivateShadowTool();
     deactivateDuotoneTool();
     deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
     fitCanvasToImagePreview();
     ensureCropper();
   } else if (tool === "blur") {
@@ -132,6 +136,7 @@ export async function activateTool(tool) {
     deactivateShadowTool();
     deactivateDuotoneTool();
     deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
     if (state.current) {
       await activateBlurTool();
     }
@@ -142,6 +147,7 @@ export async function activateTool(tool) {
     deactivateShadowTool();
     deactivateDuotoneTool();
     deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
     if (state.current) {
       await activateTiltShiftTool();
     }
@@ -152,6 +158,7 @@ export async function activateTool(tool) {
     deactivateShadowTool();
     deactivateDuotoneTool();
     deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
     if (state.current) {
       await activateSplashTool();
     }
@@ -162,6 +169,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateDuotoneTool();
     deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
     if (state.current) {
       await activateShadowTool();
     }
@@ -172,6 +180,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
     if (state.current) {
       await activateDuotoneTool();
     }
@@ -182,8 +191,20 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateChromaticAberrationTool();
     if (state.current) {
       await activateHalftoneTool();
+    }
+  } else if (tool === "chromaticaberration") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateHalftoneTool();
+    if (state.current) {
+      await activateChromaticAberrationTool();
     }
   } else {
     destroyCropper();
@@ -193,6 +214,7 @@ export async function activateTool(tool) {
     deactivateShadowTool();
     deactivateDuotoneTool();
     deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
   }
 }
 

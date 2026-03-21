@@ -28,6 +28,7 @@ import { initColorSplashListeners } from "./modules/tools/color-splash.js";
 import { initShadowInjectionListeners } from "./modules/tools/shadow-injection.js";
 import { initDuotoneListeners } from "./modules/tools/duotone.js";
 import { initHalftoneListeners } from "./modules/tools/halftone.js";
+import { initChromaticAberrationListeners } from "./modules/tools/chromatic-aberration.js";
 
 // Wrapper for commitBlob that includes rendering
 async function commitBlobWithRender(blob, label, name) {
@@ -122,6 +123,7 @@ function initToolListeners() {
   initShadowInjectionListeners(commitBlobWithRender);
   initDuotoneListeners(commitBlobWithRender);
   initHalftoneListeners(commitBlobWithRender);
+  initChromaticAberrationListeners(commitBlobWithRender);
 }
 
 // Initialize the application
