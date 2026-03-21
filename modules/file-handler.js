@@ -9,6 +9,7 @@ import { tvoDestroy } from "./tools/text-overlay.js";
 import { clearSplashCache } from "./tools/color-splash.js";
 import { clearShadowCache } from "./tools/shadow-injection.js";
 import { clearDuotoneCache } from "./tools/duotone.js";
+import { clearHalftoneCache } from "./tools/halftone.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -43,6 +44,7 @@ export function discardImage() {
   clearSplashCache();
   clearShadowCache();
   clearDuotoneCache();
+  clearHalftoneCache();
   tvoDestroy();
 
   // Revoke object URLs
@@ -110,6 +112,7 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
     clearSplashCache();
     clearShadowCache();
     clearDuotoneCache();
+    clearHalftoneCache();
     clearHistory();
     state.original = createImageState({
       blob: file,

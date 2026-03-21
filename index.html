@@ -21,6 +21,9 @@
       href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css"
     />
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./ui/textoverlay/textoverlay.css" />
+    <link rel="stylesheet" href="./ui/duotone/duotone.css" />
+    <link rel="stylesheet" href="./ui/halftone/halftone.css" />
   </head>
   <body>
     <div class="app" data-view="landing">
@@ -182,6 +185,15 @@
                 <span class="tool-card-desc">Two-color tone mapping</span>
               </div>
             </button>
+            <button class="tool-card" data-select-tool="halftone" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2"/><circle cx="12" cy="6" r="3"/><circle cx="18" cy="6" r="1.5"/><circle cx="6" cy="12" r="3.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="18" cy="12" r="4"/><circle cx="6" cy="18" r="1.5"/><circle cx="12" cy="18" r="4"/><circle cx="18" cy="18" r="2"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Halftone</span>
+                <span class="tool-card-desc">Dot pattern print effect</span>
+              </div>
+            </button>
           </div>
         </section>
 
@@ -312,6 +324,7 @@
                   <option value="colorsplash">Color Splash</option>
                   <option value="shadowinjection">Shadow Injection</option>
                   <option value="duotone">Duotone</option>
+                  <option value="halftone">Halftone</option>
                 </select>
               </div>
 
@@ -588,6 +601,64 @@
                   <div class="sidebar-row" style="margin-top:4px;">
                     <button id="duotone-reset" class="btn btn-ghost btn-full" type="button">Reset</button>
                     <button id="duotone-apply" class="btn btn-accent btn-full" type="button">Apply</button>
+                  </div>
+                </div>
+
+                <div class="sidebar-panel" data-panel="halftone">
+                  <div class="sidebar-section-label">Mode</div>
+                  <div class="halftone-mode-group">
+                    <label class="halftone-mode-btn active">
+                      <input class="halftone-mode-radio" type="radio" name="halftone-mode" value="grayscale" checked />
+                      Grayscale
+                    </label>
+                    <label class="halftone-mode-btn">
+                      <input class="halftone-mode-radio" type="radio" name="halftone-mode" value="cmyk" />
+                      CMYK
+                    </label>
+                  </div>
+
+                  <div class="sidebar-section-label">Settings</div>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Grid Size</span>
+                    <div class="sidebar-range-row">
+                      <input id="halftone-grid-size" class="sidebar-range" type="range" min="4" max="30" step="1" value="10" />
+                      <output id="halftone-grid-size-val" class="sidebar-range-value" for="halftone-grid-size">10px</output>
+                    </div>
+                  </label>
+                  <label class="sidebar-field halftone-grayscale-only">
+                    <span class="sidebar-label">Dot Color</span>
+                    <div class="sidebar-color-row">
+                      <input id="halftone-dot-color" type="color" class="sidebar-color" value="#000000" />
+                    </div>
+                  </label>
+                  <label class="sidebar-field halftone-grayscale-only">
+                    <span class="sidebar-label">Background Color</span>
+                    <div class="sidebar-color-row">
+                      <input id="halftone-bg-color" type="color" class="sidebar-color" value="#ffffff" />
+                    </div>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Dot Shape</span>
+                    <select id="halftone-shape" class="sidebar-select">
+                      <option value="circle">Circle</option>
+                      <option value="square">Square</option>
+                      <option value="diamond">Diamond</option>
+                    </select>
+                  </label>
+                  <label class="sidebar-field halftone-grayscale-only">
+                    <span class="sidebar-label">Grid Angle</span>
+                    <div class="sidebar-range-row">
+                      <input id="halftone-angle" class="sidebar-range" type="range" min="0" max="90" step="1" value="0" />
+                      <output id="halftone-angle-val" class="sidebar-range-value" for="halftone-angle">0&deg;</output>
+                    </div>
+                  </label>
+
+                  <div class="sidebar-section-label">Presets</div>
+                  <div id="halftone-presets" class="halftone-presets"></div>
+
+                  <div class="sidebar-row" style="margin-top:4px;">
+                    <button id="halftone-reset" class="btn btn-ghost btn-full" type="button">Reset</button>
+                    <button id="halftone-apply" class="btn btn-accent btn-full" type="button">Apply</button>
                   </div>
                 </div>
 

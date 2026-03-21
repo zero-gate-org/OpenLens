@@ -8,6 +8,7 @@ import { activateTiltShiftTool, deactivateTiltShiftTool } from "./tools/tilt-shi
 import { activateSplashTool, deactivateSplashTool, clearSplashCache } from "./tools/color-splash.js";
 import { activateShadowTool, deactivateShadowTool, clearShadowCache } from "./tools/shadow-injection.js";
 import { activateDuotoneTool, deactivateDuotoneTool, clearDuotoneCache } from "./tools/duotone.js";
+import { activateHalftoneTool, deactivateHalftoneTool } from "./tools/halftone.js";
 
 export function syncUndoButtons() {
   const disabled = !state.current || state.busy;
@@ -50,6 +51,7 @@ export async function renderCurrentImage(toolSwitcher) {
     if (toolSwitcher?.value === "colorsplash") await activateSplashTool();
     if (toolSwitcher?.value === "shadowinjection") await activateShadowTool();
     if (toolSwitcher?.value === "duotone") await activateDuotoneTool();
+    if (toolSwitcher?.value === "halftone") await activateHalftoneTool();
   } else {
     tvoDestroy();
     deactivateBlurTool();
@@ -98,6 +100,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateHalftoneTool();
     if (state.current) {
       await tvoInitAsync(syncUndoButtons);
     }
@@ -118,6 +121,8 @@ export async function activateTool(tool) {
     deactivateTiltShiftTool();
     deactivateSplashTool();
     deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateHalftoneTool();
     fitCanvasToImagePreview();
     ensureCropper();
   } else if (tool === "blur") {
@@ -125,6 +130,8 @@ export async function activateTool(tool) {
     deactivateTiltShiftTool();
     deactivateSplashTool();
     deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateHalftoneTool();
     if (state.current) {
       await activateBlurTool();
     }
@@ -133,6 +140,8 @@ export async function activateTool(tool) {
     deactivateBlurTool();
     deactivateSplashTool();
     deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateHalftoneTool();
     if (state.current) {
       await activateTiltShiftTool();
     }
@@ -141,6 +150,8 @@ export async function activateTool(tool) {
     deactivateBlurTool();
     deactivateTiltShiftTool();
     deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateHalftoneTool();
     if (state.current) {
       await activateSplashTool();
     }
@@ -150,6 +161,7 @@ export async function activateTool(tool) {
     deactivateTiltShiftTool();
     deactivateSplashTool();
     deactivateDuotoneTool();
+    deactivateHalftoneTool();
     if (state.current) {
       await activateShadowTool();
     }
@@ -159,8 +171,19 @@ export async function activateTool(tool) {
     deactivateTiltShiftTool();
     deactivateSplashTool();
     deactivateShadowTool();
+    deactivateHalftoneTool();
     if (state.current) {
       await activateDuotoneTool();
+    }
+  } else if (tool === "halftone") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    deactivateDuotoneTool();
+    if (state.current) {
+      await activateHalftoneTool();
     }
   } else {
     destroyCropper();
@@ -169,6 +192,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateHalftoneTool();
   }
 }
 

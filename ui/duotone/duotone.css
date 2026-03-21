@@ -1,0 +1,61 @@
+/* ========================================
+   DUOTONE
+   ======================================== */
+.duotone-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.duotone-preset-btn {
+  appearance: none;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+  transition: border-color 160ms ease, transform 120ms ease;
+  height: 28px;
+}
+
+.duotone-preset-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.duotone-preset-btn:active {
+  transform: translateY(0);
+}
+
+.duotone-preset-left,
+.duotone-preset-right {
+  display: block;
+  width: 16px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.duotone-preset-left {
+  border-radius: 20px 0 0 20px;
+}
+
+.duotone-preset-right {
+  border-radius: 0 20px 20px 0;
+}
+
+.duotone-preset-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 0 8px;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.duotone-preset-btn:hover .duotone-preset-label {
+  color: var(--text);
+}
