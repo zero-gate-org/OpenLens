@@ -12,6 +12,7 @@ import { clearDuotoneCache } from "./tools/duotone.js";
 import { clearGradientMapCache } from "./tools/gradient-map.js";
 import { clearHalftoneCache } from "./tools/halftone.js";
 import { clearChromaticAberrationCache } from "./tools/chromatic-aberration.js";
+import { clearFilmGrainCache } from "./tools/film-grain.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -49,6 +50,7 @@ export function discardImage() {
   clearGradientMapCache();
   clearHalftoneCache();
   clearChromaticAberrationCache();
+  clearFilmGrainCache();
   tvoDestroy();
 
   // Revoke object URLs
@@ -119,6 +121,7 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
   clearGradientMapCache();
   clearHalftoneCache();
   clearChromaticAberrationCache();
+  clearFilmGrainCache();
   clearHistory();
     state.original = createImageState({
       blob: file,

@@ -1,0 +1,154 @@
+/* ========================================
+   FILM GRAIN
+   ======================================== */
+
+/* Noise type segmented buttons */
+.fg-noise-group {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.fg-noise-btn {
+  flex: 1;
+  appearance: none;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  letter-spacing: 0.01em;
+}
+
+.fg-noise-btn:hover {
+  color: var(--text);
+  border-color: var(--line);
+}
+
+.fg-noise-btn.active {
+  color: var(--accent);
+  background: rgba(171, 255, 203, 0.1);
+  border-color: rgba(171, 255, 203, 0.25);
+}
+
+/* Shape segmented buttons */
+.fg-shape-group {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.fg-shape-btn {
+  flex: 1;
+  appearance: none;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  letter-spacing: 0.01em;
+}
+
+.fg-shape-btn:hover {
+  color: var(--text);
+  border-color: var(--line);
+}
+
+.fg-shape-btn.active {
+  color: var(--accent);
+  background: rgba(171, 255, 203, 0.1);
+  border-color: rgba(171, 255, 203, 0.25);
+}
+
+/* Seed row */
+.fg-seed-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fg-seed-input {
+  flex: 1;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 0.76rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  letter-spacing: 0.02em;
+  transition: border-color 160ms ease;
+}
+
+.fg-seed-input:focus {
+  border-color: rgba(171, 255, 203, 0.35);
+  outline: none;
+}
+
+.fg-seed-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.fg-seed-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* Presets */
+.fg-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fg-preset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.62rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  font-family: var(--font-body);
+}
+
+.fg-preset-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}

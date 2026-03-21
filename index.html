@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="./ui/halftone/halftone.css" />
     <link rel="stylesheet" href="./ui/chromatic-aberration/chromatic-aberration.css" />
     <link rel="stylesheet" href="./ui/glitch/glitch.css" />
+    <link rel="stylesheet" href="./ui/film-grain/film-grain.css" />
     <link rel="stylesheet" href="./ui/gradientmap/gradient-map.css" />
   </head>
   <body>
@@ -218,13 +219,22 @@
               </div>
             </button>
 
-            <button class="tool-card" data-select-tool="glitch" type="button">
+             <button class="tool-card" data-select-tool="glitch" type="button">
               <div class="tool-card-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="2" y1="7" x2="22" y2="7"/><line x1="2" y1="14" x2="22" y2="14"/><line x1="7" y1="7" x2="7" y2="2"/><line x1="14" y1="7" x2="18" y2="2"/><line x1="10" y1="14" x2="10" y2="22"/><line x1="18" y1="14" x2="14" y2="22"/></svg>
               </div>
               <div class="tool-card-content">
                 <span class="tool-card-name">Glitch Art</span>
                 <span class="tool-card-desc">Digital corruption effect</span>
+              </div>
+            </button>
+            <button class="tool-card" data-select-tool="filmgrain" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="7" cy="7" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="17" cy="8" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="12" r="1"/><circle cx="19" cy="14" r="1"/><circle cx="6" cy="17" r="1"/><circle cx="11" cy="15" r="1"/><circle cx="16" cy="17" r="1"/><circle cx="8" cy="19" r="1"/><circle cx="13" cy="20" r="1"/><circle cx="18" cy="19" r="1"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Film Grain</span>
+                <span class="tool-card-desc">Analog noise texture</span>
               </div>
             </button>
           </div>
@@ -361,6 +371,7 @@
                   <option value="halftone">Halftone</option>
                   <option value="chromaticaberration">Chromatic Aberration</option>
                   <option value="glitch">Glitch Art</option>
+                  <option value="filmgrain">Film Grain</option>
                 </select>
               </div>
 
@@ -908,6 +919,75 @@
                   <div class="sidebar-row" style="margin-top:4px;">
                     <button id="glitch-reset" class="btn btn-ghost btn-full" type="button">Reset</button>
                     <button id="glitch-apply" class="btn btn-accent btn-full" type="button">Apply</button>
+                  </div>
+                </div>
+
+                <div class="sidebar-panel" data-panel="filmgrain">
+                  <div class="sidebar-section-label">Noise Type</div>
+                  <div class="fg-noise-group">
+                    <button class="fg-noise-btn active" type="button" data-noise-type="uniform">Uniform</button>
+                    <button class="fg-noise-btn" type="button" data-noise-type="luminance">Luminance</button>
+                    <button class="fg-noise-btn" type="button" data-noise-type="color">Color</button>
+                  </div>
+
+                  <div class="sidebar-section-label">Grain Settings</div>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Grain Strength</span>
+                    <div class="sidebar-range-row">
+                      <input id="fg-strength" class="sidebar-range" type="range" min="0" max="100" step="1" value="25" />
+                      <output id="fg-strength-val" class="sidebar-range-value" for="fg-strength">25</output>
+                    </div>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Grain Size</span>
+                    <div class="sidebar-range-row">
+                      <input id="fg-grain-size" class="sidebar-range" type="range" min="1" max="8" step="1" value="1" />
+                      <output id="fg-grain-size-val" class="sidebar-range-value" for="fg-grain-size">1px</output>
+                    </div>
+                    <small style="color:#888;font-size:11px;margin-top:4px;display:block;">1 = fine digital, 4-8 = chunky vintage</small>
+                  </label>
+
+                  <div class="sidebar-section-label">Grain Shape</div>
+                  <div class="fg-shape-group">
+                    <button class="fg-shape-btn active" type="button" data-shape="square">Square</button>
+                    <button class="fg-shape-btn" type="button" data-shape="random">Random</button>
+                  </div>
+
+                  <div class="sidebar-section-label">Region Mask</div>
+                  <label class="sidebar-check">
+                    <input id="fg-highlights-only" type="checkbox" />
+                    <span>Highlights Only</span>
+                  </label>
+                  <label class="sidebar-check">
+                    <input id="fg-shadows-only" type="checkbox" />
+                    <span>Shadows Only</span>
+                  </label>
+
+                  <div class="sidebar-section-label">Fixed Grain</div>
+                  <label class="sidebar-check">
+                    <input id="fg-fixed-grain" type="checkbox" />
+                    <span>Fixed Grain (seeded)</span>
+                  </label>
+                  <div class="fg-seed-row" style="display:none;">
+                    <input id="fg-seed" class="fg-seed-input" type="number" min="0" max="2147483647" value="42" />
+                    <button id="fg-seed-randomize" class="fg-seed-btn" type="button">&#x1F3B2;</button>
+                  </div>
+
+                  <div class="sidebar-section-label">Blend</div>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Intensity</span>
+                    <div class="sidebar-range-row">
+                      <input id="fg-blend" class="sidebar-range" type="range" min="0" max="100" step="1" value="100" />
+                      <output id="fg-blend-val" class="sidebar-range-value" for="fg-blend">100%</output>
+                    </div>
+                  </label>
+
+                  <div class="sidebar-section-label">Presets</div>
+                  <div id="fg-presets" class="fg-presets"></div>
+
+                  <div class="sidebar-row" style="margin-top:4px;">
+                    <button id="fg-reset" class="btn btn-ghost btn-full" type="button">Reset</button>
+                    <button id="fg-apply" class="btn btn-accent btn-full" type="button">Apply</button>
                   </div>
                 </div>
 
