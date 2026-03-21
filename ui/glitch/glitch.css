@@ -1,0 +1,138 @@
+/* ─── Glitch Effect Panel ─────────────────────────────────────────────── */
+
+.glitch-technique-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.glitch-technique-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.glitch-technique-row:hover {
+  border-color: var(--line-strong);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.glitch-technique-row input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.glitch-technique-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+
+/* Seed row */
+.glitch-seed-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.glitch-seed-input {
+  flex: 1;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 0.76rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  letter-spacing: 0.02em;
+  transition: border-color 160ms ease;
+}
+
+.glitch-seed-input:focus {
+  border-color: rgba(171, 255, 203, 0.35);
+  outline: none;
+}
+
+.glitch-seed-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.glitch-seed-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* Presets */
+.glitch-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.glitch-preset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.62rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  font-family: var(--font-body);
+}
+
+.glitch-preset-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.glitch-preset-label {
+  white-space: nowrap;
+}
+
+/* Animation warning */
+.glitch-anim-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background: rgba(255, 180, 50, 0.1);
+  border: 1px solid rgba(255, 180, 50, 0.2);
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: #ffb432;
+  line-height: 1.4;
+}
+
+.glitch-anim-warning svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
