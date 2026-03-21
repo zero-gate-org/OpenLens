@@ -92,6 +92,18 @@ export const dom = {
   canvasStatusText: document.querySelector("#canvas-status-text"),
   canvasProgressBar: document.querySelector("#canvas-progress-bar"),
   discardImage: document.querySelector("#discard-image"),
+  // Gradient Map
+  gmGradientBar: document.querySelector("#gm-gradient-bar"),
+  gmStopsTrack: document.querySelector("#gm-stops-track"),
+  gmStopList: document.querySelector("#gm-stop-list"),
+  gmIntensity: document.querySelector("#gm-intensity"),
+  gmIntensityValue: document.querySelector("#gm-intensity-val"),
+  gmBlendMode: document.querySelector("#gm-blend-mode"),
+  gmReverse: document.querySelector("#gm-reverse"),
+  gmPresets: document.querySelector("#gm-presets"),
+  gmApply: document.querySelector("#gm-apply"),
+  gmReset: document.querySelector("#gm-reset"),
+  // Duotone
   duotoneShadowColor: document.querySelector("#duotone-shadow-color"),
   duotoneHighlightColor: document.querySelector("#duotone-highlight-color"),
   duotoneIntensity: document.querySelector("#duotone-intensity"),

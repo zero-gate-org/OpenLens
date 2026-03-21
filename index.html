@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="./ui/halftone/halftone.css" />
     <link rel="stylesheet" href="./ui/chromatic-aberration/chromatic-aberration.css" />
     <link rel="stylesheet" href="./ui/glitch/glitch.css" />
+    <link rel="stylesheet" href="./ui/gradientmap/gradient-map.css" />
   </head>
   <body>
     <div class="app" data-view="landing">
@@ -175,6 +176,16 @@
               <div class="tool-card-content">
                 <span class="tool-card-name">Shadow Injection</span>
                 <span class="tool-card-desc">Add drop shadow behind subject</span>
+              </div>
+            </button>
+
+            <button class="tool-card" data-select-tool="gradientmap" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><defs><linearGradient id="gm-icon-grad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#000"/><stop offset="50%" stop-color="#ff6b35"/><stop offset="100%" stop-color="#ffeb3b"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="3" fill="url(#gm-icon-grad)" opacity="0.3"/><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor"/><line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" opacity="0.3"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Gradient Map</span>
+                <span class="tool-card-desc">Multi-stop color remapping</span>
               </div>
             </button>
 
@@ -345,6 +356,7 @@
                   <option value="tiltshift">Tilt-Shift</option>
                   <option value="colorsplash">Color Splash</option>
                   <option value="shadowinjection">Shadow Injection</option>
+                  <option value="gradientmap">Gradient Map</option>
                   <option value="duotone">Duotone</option>
                   <option value="halftone">Halftone</option>
                   <option value="chromaticaberration">Chromatic Aberration</option>
@@ -598,6 +610,47 @@
                     <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Shadow darkness / visibility</small>
                   </label>
                   <button id="apply-shadow" class="btn btn-accent btn-full" type="button">Apply Shadow</button>
+                </div>
+
+                <div class="sidebar-panel" data-panel="gradientmap">
+                  <div class="sidebar-section-label">Gradient Editor</div>
+                  <div class="gm-gradient-editor">
+                    <div class="gm-gradient-bar-wrap">
+                      <canvas id="gm-gradient-bar" class="gm-gradient-bar" width="260" height="32"></canvas>
+                      <div id="gm-stops-track" class="gm-stops-track"></div>
+                    </div>
+                    <div id="gm-stop-list" class="gm-stop-list"></div>
+                  </div>
+
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Intensity</span>
+                    <div class="sidebar-range-row">
+                      <input id="gm-intensity" class="sidebar-range" type="range" min="0" max="100" step="1" value="100" />
+                      <output id="gm-intensity-val" class="sidebar-range-value" for="gm-intensity">100%</output>
+                    </div>
+                  </label>
+
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Blend Mode</span>
+                    <select id="gm-blend-mode" class="gm-blend-select">
+                      <option value="replace">Replace</option>
+                      <option value="luminosity">Luminosity</option>
+                      <option value="color">Color</option>
+                      <option value="multiply">Multiply</option>
+                    </select>
+                  </label>
+
+                  <div style="display:flex;gap:6px;margin-bottom:4px;">
+                    <button id="gm-reverse" class="gm-reverse-btn" type="button">Reverse</button>
+                  </div>
+
+                  <div class="sidebar-section-label">Presets</div>
+                  <div id="gm-presets" class="gm-presets"></div>
+
+                  <div class="sidebar-row" style="margin-top:4px;">
+                    <button id="gm-reset" class="btn btn-ghost btn-full" type="button">Reset</button>
+                    <button id="gm-apply" class="btn btn-accent btn-full" type="button">Apply</button>
+                  </div>
                 </div>
 
                 <div class="sidebar-panel" data-panel="duotone">

@@ -8,6 +8,7 @@ import { activateTiltShiftTool, deactivateTiltShiftTool } from "./tools/tilt-shi
 import { activateSplashTool, deactivateSplashTool, clearSplashCache } from "./tools/color-splash.js";
 import { activateShadowTool, deactivateShadowTool, clearShadowCache } from "./tools/shadow-injection.js";
 import { activateDuotoneTool, deactivateDuotoneTool, clearDuotoneCache } from "./tools/duotone.js";
+import { activateGradientMapTool, deactivateGradientMapTool } from "./tools/gradient-map.js";
 import { activateHalftoneTool, deactivateHalftoneTool } from "./tools/halftone.js";
 import { activateChromaticAberrationTool, deactivateChromaticAberrationTool } from "./tools/chromatic-aberration.js";
 import { activateGlitchTool, deactivateGlitchTool } from "./tools/glitch.js";
@@ -53,6 +54,7 @@ export async function renderCurrentImage(toolSwitcher) {
     if (toolSwitcher?.value === "colorsplash") await activateSplashTool();
     if (toolSwitcher?.value === "shadowinjection") await activateShadowTool();
     if (toolSwitcher?.value === "duotone") await activateDuotoneTool();
+    if (toolSwitcher?.value === "gradientmap") await activateGradientMapTool();
     if (toolSwitcher?.value === "halftone") await activateHalftoneTool();
     if (toolSwitcher?.value === "chromaticaberration") await activateChromaticAberrationTool();
     if (toolSwitcher?.value === "glitch") await activateGlitchTool();
@@ -104,6 +106,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
@@ -128,6 +131,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
@@ -139,6 +143,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
@@ -151,6 +156,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
@@ -163,6 +169,7 @@ export async function activateTool(tool) {
     deactivateTiltShiftTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
@@ -175,6 +182,7 @@ export async function activateTool(tool) {
     deactivateTiltShiftTool();
     deactivateSplashTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
@@ -187,11 +195,25 @@ export async function activateTool(tool) {
     deactivateTiltShiftTool();
     deactivateSplashTool();
     deactivateShadowTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     if (state.current) {
       await activateDuotoneTool();
+    }
+  } else if (tool === "gradientmap") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
+    deactivateGlitchTool();
+    if (state.current) {
+      await activateGradientMapTool();
     }
   } else if (tool === "halftone") {
     destroyCropper();
@@ -200,6 +222,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();
     if (state.current) {
@@ -212,6 +235,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateGlitchTool();
     if (state.current) {
@@ -224,6 +248,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     if (state.current) {
@@ -236,6 +261,7 @@ export async function activateTool(tool) {
     deactivateSplashTool();
     deactivateShadowTool();
     deactivateDuotoneTool();
+    deactivateGradientMapTool();
     deactivateHalftoneTool();
     deactivateChromaticAberrationTool();
     deactivateGlitchTool();

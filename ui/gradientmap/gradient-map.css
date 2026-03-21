@@ -1,0 +1,251 @@
+/* ========================================
+   GRADIENT MAP
+   ======================================== */
+
+/* Gradient Editor Container */
+.gm-gradient-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.gm-gradient-bar-wrap {
+  position: relative;
+  width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.gm-gradient-bar {
+  display: block;
+  width: 100%;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  cursor: crosshair;
+}
+
+/* Stop Handles */
+.gm-stops-track {
+  position: relative;
+  height: 20px;
+  width: 100%;
+  margin-top: -1px;
+}
+
+.gm-stop-handle {
+  position: absolute;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  transform: translateX(-50%);
+  cursor: grab;
+  z-index: 2;
+  transition: transform 80ms ease;
+}
+
+.gm-stop-handle:hover,
+.gm-stop-handle.active {
+  transform: translateX(-50%) scale(1.2);
+  z-index: 3;
+}
+
+.gm-stop-handle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid var(--text);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+.gm-stop-handle::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.gm-stop-handle.active::before {
+  border-top-color: var(--accent);
+}
+
+/* Stop List */
+.gm-stop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 120px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.gm-stop-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+}
+
+.gm-stop-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.gm-stop-swatch:hover {
+  border-color: var(--accent);
+}
+
+.gm-stop-hex {
+  width: 72px;
+  padding: 2px 6px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.65rem;
+  outline: none;
+}
+
+.gm-stop-hex:focus {
+  border-color: var(--accent);
+}
+
+.gm-stop-pos {
+  width: 48px;
+  padding: 2px 4px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.65rem;
+  text-align: center;
+  outline: none;
+}
+
+.gm-stop-pos:focus {
+  border-color: var(--accent);
+}
+
+.gm-stop-delete {
+  appearance: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  line-height: 1;
+  border-radius: 3px;
+  flex-shrink: 0;
+  transition: color 120ms ease, background 120ms ease;
+}
+
+.gm-stop-delete:hover {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* Presets */
+.gm-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.gm-preset-btn {
+  appearance: none;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+  transition: border-color 160ms ease, transform 120ms ease;
+  height: 28px;
+}
+
+.gm-preset-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.gm-preset-btn:active {
+  transform: translateY(0);
+}
+
+.gm-preset-swatch {
+  display: block;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.gm-preset-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0 8px;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.gm-preset-btn:hover .gm-preset-label {
+  color: var(--text);
+}
+
+/* Blend mode & controls */
+.gm-blend-select {
+  appearance: none;
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.75rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.gm-blend-select:focus {
+  border-color: var(--accent);
+}
+
+.gm-reverse-btn {
+  appearance: none;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 5px 10px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: border-color 160ms ease;
+}
+
+.gm-reverse-btn:hover {
+  border-color: var(--accent);
+}

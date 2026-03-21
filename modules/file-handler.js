@@ -9,6 +9,7 @@ import { tvoDestroy } from "./tools/text-overlay.js";
 import { clearSplashCache } from "./tools/color-splash.js";
 import { clearShadowCache } from "./tools/shadow-injection.js";
 import { clearDuotoneCache } from "./tools/duotone.js";
+import { clearGradientMapCache } from "./tools/gradient-map.js";
 import { clearHalftoneCache } from "./tools/halftone.js";
 import { clearChromaticAberrationCache } from "./tools/chromatic-aberration.js";
 
@@ -45,6 +46,7 @@ export function discardImage() {
   clearSplashCache();
   clearShadowCache();
   clearDuotoneCache();
+  clearGradientMapCache();
   clearHalftoneCache();
   clearChromaticAberrationCache();
   tvoDestroy();
@@ -114,6 +116,7 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
     clearSplashCache();
     clearShadowCache();
   clearDuotoneCache();
+  clearGradientMapCache();
   clearHalftoneCache();
   clearChromaticAberrationCache();
   clearHistory();
