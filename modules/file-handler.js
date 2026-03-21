@@ -8,6 +8,7 @@ import { clearTiltShiftCache } from "./tools/tilt-shift.js";
 import { tvoDestroy } from "./tools/text-overlay.js";
 import { clearSplashCache } from "./tools/color-splash.js";
 import { clearShadowCache } from "./tools/shadow-injection.js";
+import { clearDuotoneCache } from "./tools/duotone.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -41,6 +42,7 @@ export function discardImage() {
   clearTiltShiftCache();
   clearSplashCache();
   clearShadowCache();
+  clearDuotoneCache();
   tvoDestroy();
 
   // Revoke object URLs
@@ -107,6 +109,7 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
     clearTiltShiftCache();
     clearSplashCache();
     clearShadowCache();
+    clearDuotoneCache();
     clearHistory();
     state.original = createImageState({
       blob: file,

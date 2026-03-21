@@ -7,6 +7,7 @@ import { activateBlurTool, deactivateBlurTool, clearBlurCache } from "./tools/se
 import { activateTiltShiftTool, deactivateTiltShiftTool } from "./tools/tilt-shift.js";
 import { activateSplashTool, deactivateSplashTool, clearSplashCache } from "./tools/color-splash.js";
 import { activateShadowTool, deactivateShadowTool, clearShadowCache } from "./tools/shadow-injection.js";
+import { activateDuotoneTool, deactivateDuotoneTool, clearDuotoneCache } from "./tools/duotone.js";
 
 export function syncUndoButtons() {
   const disabled = !state.current || state.busy;
@@ -48,6 +49,7 @@ export async function renderCurrentImage(toolSwitcher) {
     if (toolSwitcher?.value === "tiltshift") await activateTiltShiftTool();
     if (toolSwitcher?.value === "colorsplash") await activateSplashTool();
     if (toolSwitcher?.value === "shadowinjection") await activateShadowTool();
+    if (toolSwitcher?.value === "duotone") await activateDuotoneTool();
   } else {
     tvoDestroy();
     deactivateBlurTool();
@@ -95,6 +97,7 @@ export async function activateTool(tool) {
     deactivateTiltShiftTool();
     deactivateSplashTool();
     deactivateShadowTool();
+    deactivateDuotoneTool();
     if (state.current) {
       await tvoInitAsync(syncUndoButtons);
     }
@@ -146,8 +149,18 @@ export async function activateTool(tool) {
     deactivateBlurTool();
     deactivateTiltShiftTool();
     deactivateSplashTool();
+    deactivateDuotoneTool();
     if (state.current) {
       await activateShadowTool();
+    }
+  } else if (tool === "duotone") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    if (state.current) {
+      await activateDuotoneTool();
     }
   } else {
     destroyCropper();
@@ -155,6 +168,7 @@ export async function activateTool(tool) {
     deactivateTiltShiftTool();
     deactivateSplashTool();
     deactivateShadowTool();
+    deactivateDuotoneTool();
   }
 }
 

@@ -26,6 +26,7 @@ import { initTiltShiftListeners } from "./modules/tools/tilt-shift.js";
 import { initTextOverlayListeners } from "./modules/tools/text-overlay.js";
 import { initColorSplashListeners } from "./modules/tools/color-splash.js";
 import { initShadowInjectionListeners } from "./modules/tools/shadow-injection.js";
+import { initDuotoneListeners } from "./modules/tools/duotone.js";
 
 // Wrapper for commitBlob that includes rendering
 async function commitBlobWithRender(blob, label, name) {
@@ -118,6 +119,7 @@ function initToolListeners() {
   initTextOverlayListeners(commitBlobWithRender, syncUndoButtons);
   initColorSplashListeners(commitBlobWithRender);
   initShadowInjectionListeners(commitBlobWithRender);
+  initDuotoneListeners(commitBlobWithRender);
 }
 
 // Initialize the application

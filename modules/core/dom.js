@@ -92,4 +92,11 @@ export const dom = {
   canvasStatusText: document.querySelector("#canvas-status-text"),
   canvasProgressBar: document.querySelector("#canvas-progress-bar"),
   discardImage: document.querySelector("#discard-image"),
+  duotoneShadowColor: document.querySelector("#duotone-shadow-color"),
+  duotoneHighlightColor: document.querySelector("#duotone-highlight-color"),
+  duotoneIntensity: document.querySelector("#duotone-intensity"),
+  duotoneIntensityValue: document.querySelector("#duotone-intensity-val"),
+  duotonePresets: document.querySelector("#duotone-presets"),
+  duotoneApply: document.querySelector("#duotone-apply"),
+  duotoneReset: document.querySelector("#duotone-reset"),
 };

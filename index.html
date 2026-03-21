@@ -172,6 +172,16 @@
                 <span class="tool-card-desc">Add drop shadow behind subject</span>
               </div>
             </button>
+
+            <button class="tool-card" data-select-tool="duotone" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20" fill="currentColor" opacity="0.25"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Duotone</span>
+                <span class="tool-card-desc">Two-color tone mapping</span>
+              </div>
+            </button>
           </div>
         </section>
 
@@ -301,6 +311,7 @@
                   <option value="tiltshift">Tilt-Shift</option>
                   <option value="colorsplash">Color Splash</option>
                   <option value="shadowinjection">Shadow Injection</option>
+                  <option value="duotone">Duotone</option>
                 </select>
               </div>
 
@@ -550,6 +561,34 @@
                     <small style="color: #888; font-size: 11px; margin-top: 4px; display: block;">Shadow darkness / visibility</small>
                   </label>
                   <button id="apply-shadow" class="btn btn-accent btn-full" type="button">Apply Shadow</button>
+                </div>
+
+                <div class="sidebar-panel" data-panel="duotone">
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Shadows / Dark Tones</span>
+                    <div class="sidebar-color-row">
+                      <input id="duotone-shadow-color" type="color" class="sidebar-color" value="#1a0533" />
+                    </div>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Highlights / Light Tones</span>
+                    <div class="sidebar-color-row">
+                      <input id="duotone-highlight-color" type="color" class="sidebar-color" value="#f7e733" />
+                    </div>
+                  </label>
+                  <label class="sidebar-field">
+                    <span class="sidebar-label">Intensity</span>
+                    <div class="sidebar-range-row">
+                      <input id="duotone-intensity" class="sidebar-range" type="range" min="0" max="100" step="1" value="100" />
+                      <output id="duotone-intensity-val" class="sidebar-range-value" for="duotone-intensity">100%</output>
+                    </div>
+                  </label>
+                  <div class="sidebar-section-label">Presets</div>
+                  <div id="duotone-presets" class="duotone-presets"></div>
+                  <div class="sidebar-row" style="margin-top:4px;">
+                    <button id="duotone-reset" class="btn btn-ghost btn-full" type="button">Reset</button>
+                    <button id="duotone-apply" class="btn btn-accent btn-full" type="button">Apply</button>
+                  </div>
                 </div>
 
                 <div class="sidebar-panel" data-panel="textoverlay">
