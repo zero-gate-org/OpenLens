@@ -17,6 +17,7 @@ import { activateLomoTool, deactivateLomoTool, clearLomoCache } from "./tools/lo
 import { activateOilPaintTool, deactivateOilPaintTool } from "./tools/oil-paint.js";
 import { activateSketchTool, deactivateSketchTool, clearSketchCache } from "./tools/sketch.js";
 import { init as initCurvedText, destroy as destroyCurvedText, setCommitBlobCallback } from "../ui/curvedtext/curvedtext.js";
+import { init as initStrokeText, destroy as destroyStrokeText, setCommitBlobCallback as setStrokeCommitBlobCallback } from "../ui/stroketext/stroketext.js";
 import { commitBlob, pushHistory } from "./file-handler.js";
 
 export function syncUndoButtons() {
@@ -44,8 +45,9 @@ export async function renderCurrentImage(toolSwitcher) {
 
   const isTextoverlayActive = toolSwitcher?.value === "textoverlay";
   const isCurvedtextActive = toolSwitcher?.value === "curvedtext";
+  const isStroketextActive = toolSwitcher?.value === "stroketext";
 
-  if (!isTextoverlayActive && !isCurvedtextActive) {
+  if (!isTextoverlayActive && !isCurvedtextActive && !isStroketextActive) {
     destroyCropper();
     deactivateBlurTool();
     deactivateTiltShiftTool();
@@ -100,6 +102,29 @@ export async function renderCurrentImage(toolSwitcher) {
     setCommitBlobCallback((blob, label, name) => commitBlob(blob, label, name, async () => {
       await renderCurrentImage(document.querySelector("#tool-switcher"));
     }));
+  } else if (isStroketextActive) {
+    destroyStrokeText();
+    destroyCurvedText();
+    tvoDestroy();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    await new Promise((resolve, reject) => {
+      dom.cropImage.onload = resolve;
+      dom.cropImage.onerror = reject;
+      dom.cropImage.src = state.current.previewUrl;
+    });
+    fitCanvasToImagePreview();
+    dom.cropSurface.style.display = "";
+    initStrokeText(
+      dom.cropImage,
+      () => state.current ? { ...state.current } : null,
+      () => pushHistory("Stroke Text")
+    );
+    setStrokeCommitBlobCallback((blob, label, name) => commitBlob(blob, label, name, async () => {
+      await renderCurrentImage(document.querySelector("#tool-switcher"));
+    }));
   }
   syncUndoButtons();
 }
@@ -135,6 +160,7 @@ export async function activateTool(tool) {
     dom.cropSurface.style.display = "none";
     tvoDestroy();
     destroyCurvedText();
+    destroyStrokeText();
     deactivateBlurTool();
     deactivateTiltShiftTool();
     deactivateSplashTool();
@@ -156,6 +182,7 @@ export async function activateTool(tool) {
 
   tvoDestroy();
   destroyCurvedText();
+  destroyStrokeText();
   dom.cropSurface.style.display = "";
 
   document.querySelectorAll(".sidebar-panel").forEach((p) => {
@@ -399,6 +426,7 @@ export async function activateTool(tool) {
     deactivateLomoTool();
     deactivateOilPaintTool();
     destroyCurvedText();
+    destroyStrokeText();
     if (state.current) {
       await activateSketchTool();
     }
@@ -439,6 +467,44 @@ export async function activateTool(tool) {
       }));
     }
     return;
+  } else if (tool === "stroketext") {
+    destroyCropper();
+    destroyCurvedText();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateGradientMapTool();
+    deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
+    deactivateGlitchTool();
+    deactivateFilmGrainTool();
+    deactivateLomoTool();
+    deactivateOilPaintTool();
+    deactivateSketchTool();
+    tvoDestroy();
+
+    document.querySelectorAll(".sidebar-panel").forEach((p) => {
+      p.classList.toggle("is-active", p.dataset.panel === tool);
+    });
+    const toolSwitcher = document.querySelector("#tool-switcher");
+    if (toolSwitcher.value !== tool) toolSwitcher.value = tool;
+
+    if (state.current) {
+      dom.cropSurface.style.display = "";
+      fitCanvasToImagePreview();
+      const baseCanvas = dom.cropImage;
+      initStrokeText(
+        baseCanvas,
+        () => state.current ? { ...state.current } : null,
+        () => pushHistory("Stroke Text")
+      );
+      setStrokeCommitBlobCallback((blob, label, name) => commitBlob(blob, label, name, async () => {
+        await renderCurrentImage(document.querySelector("#tool-switcher"));
+      }));
+    }
+    return;
   } else {
     destroyCropper();
     deactivateBlurTool();
@@ -455,6 +521,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateSketchTool();
     destroyCurvedText();
+    destroyStrokeText();
   }
 }
 

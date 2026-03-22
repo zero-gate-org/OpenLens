@@ -1,0 +1,277 @@
+/* ========================================
+   STROKE TEXT MODULE
+   ======================================== */
+
+/* --- Canvas layer stack --- */
+.st-canvas-stack {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.st-canvas-stack canvas {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 48px - 48px);
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+}
+
+.st-canvas-stack .st-base-canvas {
+  position: relative;
+  z-index: 1;
+}
+
+.st-canvas-stack .st-text-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.st-canvas-stack .st-overlay-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+/* --- Tab bar --- */
+.st-tab-bar {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.st-tab-btn {
+  flex: 1;
+  padding: 7px 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-align: center;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.st-tab-btn:not(:last-child) {
+  border-right: 1px solid var(--line);
+}
+
+.st-tab-btn:hover {
+  background: rgba(171, 255, 203, 0.06);
+  color: var(--text);
+}
+
+.st-tab-btn.active {
+  background: rgba(171, 255, 203, 0.12);
+  color: var(--accent);
+}
+
+/* --- Tab panels --- */
+.st-tab-panel {
+  display: none;
+}
+
+.st-tab-panel.active {
+  display: block;
+}
+
+/* --- Segmented control (fill type, stroke pos, line join) --- */
+.st-segment-group {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.st-fill-type-btn,
+.st-stroke-pos-btn,
+.st-join-btn {
+  flex: 1;
+  padding: 5px 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-align: center;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+  white-space: nowrap;
+}
+
+.st-fill-type-btn:not(:last-child),
+.st-stroke-pos-btn:not(:last-child),
+.st-join-btn:not(:last-child) {
+  border-right: 1px solid var(--line);
+}
+
+.st-fill-type-btn:hover,
+.st-stroke-pos-btn:hover,
+.st-join-btn:hover {
+  background: rgba(171, 255, 203, 0.06);
+  color: var(--text);
+}
+
+.st-fill-type-btn.active,
+.st-stroke-pos-btn.active,
+.st-join-btn.active {
+  background: rgba(171, 255, 203, 0.12);
+  color: var(--accent);
+}
+
+/* --- Alignment radio group --- */
+.st-align-group {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.st-align-btn {
+  flex: 1;
+  padding: 5px 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-align: center;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.st-align-btn:not(:last-child) {
+  border-right: 1px solid var(--line);
+}
+
+.st-align-btn:hover {
+  background: rgba(171, 255, 203, 0.06);
+}
+
+.st-align-btn.active {
+  background: rgba(171, 255, 203, 0.12);
+  color: var(--accent);
+}
+
+/* --- Preset cards row --- */
+.st-presets-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(171, 255, 203, 0.2) transparent;
+}
+
+.st-presets-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.st-presets-row::-webkit-scrollbar-thumb {
+  background: rgba(171, 255, 203, 0.2);
+  border-radius: 2px;
+}
+
+.st-preset-card {
+  flex-shrink: 0;
+  width: 80px;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 120ms ease, transform 120ms ease;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.st-preset-card:hover {
+  border-color: rgba(171, 255, 203, 0.4);
+  transform: translateY(-1px);
+}
+
+.st-preset-card:active {
+  transform: translateY(0);
+}
+
+.st-preset-thumb {
+  width: 80px;
+  height: 40px;
+  line-height: 0;
+}
+
+.st-preset-thumb canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.st-preset-name {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  padding: 3px 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+}
+
+/* --- Subsection styling --- */
+.st-subsection {
+  padding-left: 10px;
+  border-left: 2px solid var(--line);
+  margin-left: 2px;
+  margin-bottom: 2px;
+}
+
+/* --- Conditional sections --- */
+.st-solid-only,
+.st-grad-only {
+  transition: opacity 120ms ease;
+}
+
+/* --- Double stroke sub-panel --- */
+.st-double-stroke-sub {
+  padding-left: 10px;
+  border-left: 2px solid var(--line);
+  margin-left: 2px;
+}
+
+/* --- Glow layers indicator --- */
+.st-layers-dots {
+  display: flex;
+  gap: 3px;
+  margin-left: 6px;
+}
+
+.st-layers-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(171, 255, 203, 0.2);
+  transition: background 120ms ease;
+}
+
+.st-layers-dot.active {
+  background: var(--accent);
+}
