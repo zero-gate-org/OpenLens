@@ -1,0 +1,341 @@
+/* ========================================
+   CURVED TEXT MODULE
+   ======================================== */
+
+/* --- Canvas layer stack --- */
+.ct-canvas-stack {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.ct-canvas-stack canvas {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 48px - 48px);
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+}
+
+.ct-canvas-stack .ct-base-canvas {
+  position: relative;
+  z-index: 1;
+}
+
+.ct-canvas-stack .ct-text-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ct-canvas-stack .ct-overlay-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+/* --- Path type segmented control --- */
+.ct-path-type-group {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ct-path-type-btn {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+  white-space: nowrap;
+}
+
+.ct-path-type-btn:not(:last-child) {
+  border-right: 1px solid var(--line);
+}
+
+.ct-path-type-btn:hover {
+  background: rgba(171, 255, 203, 0.06);
+  color: var(--text);
+}
+
+.ct-path-type-btn.active {
+  background: rgba(171, 255, 203, 0.12);
+  color: var(--accent);
+}
+
+/* --- Text side toggle --- */
+.ct-side-group {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ct-side-btn {
+  flex: 1;
+  padding: 5px 8px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: center;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.ct-side-btn:not(:last-child) {
+  border-right: 1px solid var(--line);
+}
+
+.ct-side-btn:hover {
+  background: rgba(171, 255, 203, 0.06);
+}
+
+.ct-side-btn.active {
+  background: rgba(171, 255, 203, 0.12);
+  color: var(--accent);
+}
+
+/* --- Alignment radio group --- */
+.ct-align-group {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ct-align-btn {
+  flex: 1;
+  padding: 5px 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: center;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.ct-align-btn:not(:last-child) {
+  border-right: 1px solid var(--line);
+}
+
+.ct-align-btn:hover {
+  background: rgba(171, 255, 203, 0.06);
+}
+
+.ct-align-btn.active {
+  background: rgba(171, 255, 203, 0.12);
+  color: var(--accent);
+}
+
+/* --- Text item list (layers) --- */
+.ct-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px;
+  min-height: 48px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.ct-item-empty {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 8px 4px;
+  opacity: 0.6;
+}
+
+.ct-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: background 120ms ease, border-color 120ms ease;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ct-item:hover {
+  background: rgba(171, 255, 203, 0.04);
+}
+
+.ct-item.selected {
+  border-color: rgba(171, 255, 203, 0.35);
+  background: rgba(171, 255, 203, 0.08);
+}
+
+.ct-item-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  background: rgba(171, 255, 203, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+.ct-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ct-item-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ct-item-sub {
+  font-size: 0.58rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ct-item-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.ct-item-btn {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: opacity 120ms ease, color 120ms ease;
+  padding: 0;
+  border-radius: 3px;
+}
+
+.ct-item-btn:hover {
+  opacity: 1;
+  color: var(--text);
+}
+
+.ct-item-btn.visible {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.ct-item-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* --- Presets row --- */
+.ct-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.ct-preset-btn {
+  padding: 4px 8px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  white-space: nowrap;
+}
+
+.ct-preset-btn:hover {
+  background: rgba(171, 255, 203, 0.08);
+  color: var(--text);
+  border-color: rgba(171, 255, 203, 0.25);
+}
+
+/* --- Conditional sections --- */
+.ct-arc-only,
+.ct-bezier-only,
+.ct-wave-only {
+  display: none;
+}
+
+.ct-arc-only.show,
+.ct-bezier-only.show,
+.ct-wave-only.show {
+  display: block;
+}
+
+/* --- Font input with Google Fonts support --- */
+.ct-font-input-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.ct-font-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Stroke / Shadow subsections --- */
+.ct-subsection {
+  padding-left: 10px;
+  border-left: 2px solid var(--line);
+  margin-left: 2px;
+}
+
+/* --- Handle tooltips on hover --- */
+.ct-handle-tooltip {
+  position: absolute;
+  pointer-events: none;
+  font-size: 0.6rem;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.75);
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  z-index: 100;
+  transform: translate(-50%, -120%);
+}

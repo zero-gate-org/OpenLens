@@ -14,6 +14,7 @@ import { clearHalftoneCache } from "./tools/halftone.js";
 import { clearChromaticAberrationCache } from "./tools/chromatic-aberration.js";
 import { clearFilmGrainCache } from "./tools/film-grain.js";
 import { clearOilPaintCache } from "./tools/oil-paint.js";
+import { destroy as destroyCurvedText } from "../ui/curvedtext/curvedtext.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -54,6 +55,7 @@ export function discardImage() {
   clearFilmGrainCache();
   clearOilPaintCache();
   tvoDestroy();
+  destroyCurvedText();
 
   // Revoke object URLs
   if (state.current?.previewUrl) revokeUrl(state.current.previewUrl);
@@ -125,6 +127,7 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
   clearChromaticAberrationCache();
   clearFilmGrainCache();
   clearOilPaintCache();
+  destroyCurvedText();
   clearHistory();
     state.original = createImageState({
       blob: file,

@@ -16,6 +16,8 @@ import { activateFilmGrainTool, deactivateFilmGrainTool } from "./tools/film-gra
 import { activateLomoTool, deactivateLomoTool, clearLomoCache } from "./tools/lomo.js";
 import { activateOilPaintTool, deactivateOilPaintTool } from "./tools/oil-paint.js";
 import { activateSketchTool, deactivateSketchTool, clearSketchCache } from "./tools/sketch.js";
+import { init as initCurvedText, destroy as destroyCurvedText, setCommitBlobCallback } from "../ui/curvedtext/curvedtext.js";
+import { commitBlob, pushHistory } from "./file-handler.js";
 
 export function syncUndoButtons() {
   const disabled = !state.current || state.busy;
@@ -41,8 +43,9 @@ export async function renderCurrentImage(toolSwitcher) {
   dom.formatSelect.value = state.current.format;
 
   const isTextoverlayActive = toolSwitcher?.value === "textoverlay";
+  const isCurvedtextActive = toolSwitcher?.value === "curvedtext";
 
-  if (!isTextoverlayActive) {
+  if (!isTextoverlayActive && !isCurvedtextActive) {
     destroyCropper();
     deactivateBlurTool();
     deactivateTiltShiftTool();
@@ -66,7 +69,7 @@ export async function renderCurrentImage(toolSwitcher) {
     if (toolSwitcher?.value === "lomo") await activateLomoTool();
     if (toolSwitcher?.value === "oilpaint") await activateOilPaintTool();
     if (toolSwitcher?.value === "sketch") await activateSketchTool();
-  } else {
+  } else if (isTextoverlayActive) {
     tvoDestroy();
     deactivateBlurTool();
     deactivateTiltShiftTool();
@@ -75,6 +78,28 @@ export async function renderCurrentImage(toolSwitcher) {
     fitCanvasToImagePreview();
     tvoUpdateFgStatus();
     await tvoInitAsync(syncUndoButtons);
+  } else if (isCurvedtextActive) {
+    destroyCurvedText();
+    tvoDestroy();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    await new Promise((resolve, reject) => {
+      dom.cropImage.onload = resolve;
+      dom.cropImage.onerror = reject;
+      dom.cropImage.src = state.current.previewUrl;
+    });
+    fitCanvasToImagePreview();
+    dom.cropSurface.style.display = "";
+    initCurvedText(
+      dom.cropImage,
+      () => state.current ? { ...state.current } : null,
+      () => pushHistory("Curved Text")
+    );
+    setCommitBlobCallback((blob, label, name) => commitBlob(blob, label, name, async () => {
+      await renderCurrentImage(document.querySelector("#tool-switcher"));
+    }));
   }
   syncUndoButtons();
 }
@@ -109,6 +134,7 @@ export async function activateTool(tool) {
     if (toolSwitcher.value !== tool) toolSwitcher.value = tool;
     dom.cropSurface.style.display = "none";
     tvoDestroy();
+    destroyCurvedText();
     deactivateBlurTool();
     deactivateTiltShiftTool();
     deactivateSplashTool();
@@ -129,6 +155,7 @@ export async function activateTool(tool) {
   }
 
   tvoDestroy();
+  destroyCurvedText();
   dom.cropSurface.style.display = "";
 
   document.querySelectorAll(".sidebar-panel").forEach((p) => {
@@ -371,9 +398,47 @@ export async function activateTool(tool) {
     deactivateFilmGrainTool();
     deactivateLomoTool();
     deactivateOilPaintTool();
+    destroyCurvedText();
     if (state.current) {
       await activateSketchTool();
     }
+  } else if (tool === "curvedtext") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateGradientMapTool();
+    deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
+    deactivateGlitchTool();
+    deactivateFilmGrainTool();
+    deactivateLomoTool();
+    deactivateOilPaintTool();
+    deactivateSketchTool();
+    tvoDestroy();
+
+    document.querySelectorAll(".sidebar-panel").forEach((p) => {
+      p.classList.toggle("is-active", p.dataset.panel === tool);
+    });
+    const toolSwitcher = document.querySelector("#tool-switcher");
+    if (toolSwitcher.value !== tool) toolSwitcher.value = tool;
+
+    if (state.current) {
+      dom.cropSurface.style.display = "";
+      fitCanvasToImagePreview();
+      const baseCanvas = dom.cropImage;
+      initCurvedText(
+        baseCanvas,
+        () => state.current ? { ...state.current } : null,
+        () => pushHistory("Curved Text")
+      );
+      setCommitBlobCallback((blob, label, name) => commitBlob(blob, label, name, async () => {
+        await renderCurrentImage(document.querySelector("#tool-switcher"));
+      }));
+    }
+    return;
   } else {
     destroyCropper();
     deactivateBlurTool();
@@ -389,6 +454,7 @@ export async function activateTool(tool) {
     deactivateLomoTool();
     deactivateOilPaintTool();
     deactivateSketchTool();
+    destroyCurvedText();
   }
 }
 
