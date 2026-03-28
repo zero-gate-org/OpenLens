@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="./ui/sketch/sketch.css" />
     <link rel="stylesheet" href="./ui/curvedtext/curvedtext.css" />
     <link rel="stylesheet" href="./ui/stroketext/stroketext.css" />
+    <link rel="stylesheet" href="./ui/stickers/stickers.css" />
   </head>
   <body>
     <div class="app" data-view="landing">
@@ -289,6 +290,16 @@
                 <span class="tool-card-desc">Edge detection drawing effect</span>
               </div>
             </button>
+
+            <button class="tool-card" data-select-tool="stickers" type="button">
+              <div class="tool-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+              </div>
+              <div class="tool-card-content">
+                <span class="tool-card-name">Stickers</span>
+                <span class="tool-card-desc">Emoji & SVG overlays</span>
+              </div>
+            </button>
           </div>
         </section>
 
@@ -399,8 +410,8 @@
                     <div id="canvas-progress-bar" class="canvas-progress-bar"></div>
                   </div>
                 </div>
+                </div>
               </div>
-            </div>
 
             <!-- Right: tool sidebar -->
             <aside class="tool-sidebar">
@@ -429,6 +440,7 @@
                   <option value="sketch">Sketch / Pencil</option>
                   <option value="curvedtext">Curved Text</option>
                   <option value="stroketext">Stroke Text</option>
+                  <option value="stickers">Stickers</option>
                 </select>
               </div>
 
@@ -1945,6 +1957,11 @@
                     <button id="st-reset" class="btn btn-ghost btn-full" type="button">Reset</button>
                     <button id="st-apply" class="btn btn-accent btn-full" type="button">Apply</button>
                   </div>
+                </div>
+
+                <!-- Stickers Panel -->
+                <div class="sidebar-panel" data-panel="stickers" id="stickers-sidebar-panel">
+                  <div class="stk-layer-empty" style="padding:24px;text-align:center;color:var(--muted);font-size:0.72rem;">Load an image to start adding stickers.</div>
                 </div>
               </div>
             </aside>

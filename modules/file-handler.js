@@ -15,6 +15,7 @@ import { clearChromaticAberrationCache } from "./tools/chromatic-aberration.js";
 import { clearFilmGrainCache } from "./tools/film-grain.js";
 import { clearOilPaintCache } from "./tools/oil-paint.js";
 import { destroy as destroyCurvedText } from "../ui/curvedtext/curvedtext.js";
+import { destroy as destroyStickers } from "../ui/stickers/stickers.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -56,6 +57,7 @@ export function discardImage() {
   clearOilPaintCache();
   tvoDestroy();
   destroyCurvedText();
+  destroyStickers();
 
   // Revoke object URLs
   if (state.current?.previewUrl) revokeUrl(state.current.previewUrl);
@@ -128,6 +130,7 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
   clearFilmGrainCache();
   clearOilPaintCache();
   destroyCurvedText();
+  destroyStickers();
   clearHistory();
     state.original = createImageState({
       blob: file,
