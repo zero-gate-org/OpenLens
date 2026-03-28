@@ -14,8 +14,8 @@ import { clearHalftoneCache } from "./tools/halftone.js";
 import { clearChromaticAberrationCache } from "./tools/chromatic-aberration.js";
 import { clearFilmGrainCache } from "./tools/film-grain.js";
 import { clearOilPaintCache } from "./tools/oil-paint.js";
-import { destroy as destroyCurvedText } from "../ui/curvedtext/curvedtext.js";
-import { destroy as destroyStickers } from "../ui/stickers/stickers.js";
+import { destroy as destroyCurvedText } from "./tools/curvedtext.js";
+import { destroy as destroyStickers } from "./tools/stickers.js";
 
 export function pushHistory(label) {
   if (!state.current) return;

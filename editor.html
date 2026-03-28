@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OpenLens:Local Image Lab</title>
+    <meta
+      name="description"
+      content="OpenLens is a static, browser-only image editor for crop, resize, rotate, compress, format conversion, background removal, and text-behind-object compositing."
+    />
+    <link rel="icon" type="image/png" href="./OpenLens.png" />
+    <meta name="theme-color" content="#0f1417" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;600;700&family=Oswald:wght@400;600;700&family=Dancing+Script:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./ui/textoverlay/textoverlay.css" />
+    <link rel="stylesheet" href="./ui/duotone/duotone.css" />
+    <link rel="stylesheet" href="./ui/halftone/halftone.css" />
+    <link rel="stylesheet" href="./ui/chromatic-aberration/chromatic-aberration.css" />
+    <link rel="stylesheet" href="./ui/glitch/glitch.css" />
+    <link rel="stylesheet" href="./ui/film-grain/film-grain.css" />
+    <link rel="stylesheet" href="./ui/gradientmap/gradient-map.css" />
+    <link rel="stylesheet" href="./ui/lomo/lomo.css" />
+    <link rel="stylesheet" href="./ui/oil-paint/oil-paint.css" />
+    <link rel="stylesheet" href="./ui/sketch/sketch.css" />
+    <link rel="stylesheet" href="./ui/curvedtext/curvedtext.css" />
+    <link rel="stylesheet" href="./ui/stroketext/stroketext.css" />
+    <link rel="stylesheet" href="./ui/stickers/stickers.css" />
+  </head>
+  <body>
+    <div class="app" data-view="editor">
+
+            <!-- ===== TOPBAR (editor view) ===== -->
+      <nav class="topbar">
+        <button id="back-to-landing" class="back-btn" type="button" aria-label="Back to tools">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </button>
+        <div class="topbar-brand">
+          <img src="./OpenLens.png" alt="Logo" width="24" height="24" />
+          <span class="brand-name">OpenLens</span>
+        </div>
+        <!-- Hidden legacy nodes kept for JS compatibility -->
+        <span id="status-text" style="display:none" aria-hidden="true"></span>
+        <div id="progress-bar" style="display:none" aria-hidden="true"></div>
+
+        <!-- Centered file metadata -->
+        <div class="topbar-meta" id="topbar-meta" aria-live="polite">
+          <span id="file-name" class="topbar-filename">No file loaded</span>
+          <dl class="topbar-chips">
+            <div class="meta-chip"><dt>DIM</dt><dd id="meta-dimensions">-</dd></div>
+            <div class="meta-chip"><dt>TYPE</dt><dd id="meta-format">-</dd></div>
+            <div class="meta-chip"><dt>SIZE</dt><dd id="meta-size">-</dd></div>
+            <div class="meta-chip"><dt>HIST</dt><dd id="meta-history">0 steps</dd></div>
+          </dl>
+        </div>
+
+        <div class="topbar-actions">
+          <button id="undo-button" class="btn btn-ghost btn-sm" type="button">Undo</button>
+          <button id="reset-button" class="btn btn-ghost btn-sm" type="button">Reset</button>
+          <button id="download-button" class="btn btn-accent btn-sm" type="button">Download</button>
+        </div>
+      </nav>
+
+      <!-- ===== STUDIO (editor view) ===== -->
+      <main class="studio">
+        <div
+          id="dropzone"
+          class="dropzone"
+          tabindex="0"
+          role="button"
+          aria-label="Upload an image"
+        >
+          <input id="file-input" type="file" accept="image/*" hidden />
+          <div class="dropzone-copy">
+            <div class="drop-icon-ring">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <h2>Drop an image or choose a file</h2>
+            <p class="drop-meta">PNG, JPEG, WebP, GIF, BMP, AVIF, TIFF</p>
+            <button id="pick-file" class="btn btn-accent" type="button">Choose image</button>
+          </div>
+        </div>
+
+        <div id="editor-panel" class="editor-panel is-hidden">
+          <div class="editor-body">
+            <!-- Left: canvas -->
+            <div class="canvas-area">
+              <button
+                id="discard-image"
+                class="canvas-discard-btn"
+                type="button"
+                aria-label="Discard image"
+                title="Discard image"
+              >
+                ×
+              </button>
+              <div class="crop-surface">
+                <img id="crop-image" alt="Editable image" />
+              </div>
+              <!-- Processing overlay -->
+              <div id="canvas-processing-overlay" class="canvas-processing-overlay" aria-hidden="true">
+                <div class="canvas-processing-inner">
+                  <div class="canvas-spinner"></div>
+                  <span id="canvas-status-text" class="canvas-status-text">Processing…</span>
+                  <div class="canvas-progress-shell">
+                    <div id="canvas-progress-bar" class="canvas-progress-bar"></div>
+                  </div>
+                </div>
+                </div>
+              </div>
+
+            <!-- Right: tool sidebar -->
+            <aside class="tool-sidebar">
+
+              <!-- Tool switcher -->
+              <div class="sidebar-tool-header">
+                <select id="tool-switcher" class="tool-switcher">
+                  <option value="crop">Crop</option>
+                  <option value="resize">Resize</option>
+                  <option value="rotate">Rotate</option>
+                  <option value="convert">Convert</option>
+                  <option value="bgremove">BG Remove</option>
+                  <option value="blur">Selective Blur</option>
+                  <option value="textoverlay">Text Behind Object</option>
+                  <option value="tiltshift">Tilt-Shift</option>
+                  <option value="colorsplash">Color Splash</option>
+                  <option value="shadowinjection">Shadow Injection</option>
+                  <option value="gradientmap">Gradient Map</option>
+                  <option value="duotone">Duotone</option>
+                  <option value="halftone">Halftone</option>
+                  <option value="chromaticaberration">Chromatic Aberration</option>
+                  <option value="glitch">Glitch Art</option>
+                  <option value="filmgrain">Film Grain</option>
+                  <option value="lomo">Lomo / Cross-Process</option>
+                  <option value="oilpaint">Oil Paint</option>
+                  <option value="sketch">Sketch / Pencil</option>
+                  <option value="curvedtext">Curved Text</option>
+                  <option value="stroketext">Stroke Text</option>
+                  <option value="stickers">Stickers</option>
+                </select>
+              </div>
+
+              <!-- Tool panels -->
+              <div class="sidebar-panels"><!-- mounted by editor-app.js --></div>
+            </aside>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <p id="editor-file-protocol-note" hidden style="margin:12px auto;max-width:980px;padding:8px 10px;border:1px solid #b07a00;border-radius:8px;background:#fff8e6;color:#6e4b00;font-size:0.9rem;">For best reliability, run OpenLens over HTTP (local server or GitHub Pages) instead of file://.</p>
+    <img id="preview-image" alt="" style="display:none!important" />
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fabric@5.5.2/dist/fabric.min.js"></script>
+    <script type="module" src="./editor-app.js"></script>
+  </body>
+</html>

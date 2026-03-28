@@ -16,10 +16,60 @@ import { activateFilmGrainTool, deactivateFilmGrainTool } from "./tools/film-gra
 import { activateLomoTool, deactivateLomoTool, clearLomoCache } from "./tools/lomo.js";
 import { activateOilPaintTool, deactivateOilPaintTool } from "./tools/oil-paint.js";
 import { activateSketchTool, deactivateSketchTool, clearSketchCache } from "./tools/sketch.js";
-import { init as initCurvedText, destroy as destroyCurvedText, setCommitBlobCallback } from "../ui/curvedtext/curvedtext.js";
-import { init as initStrokeText, destroy as destroyStrokeText, setCommitBlobCallback as setStrokeCommitBlobCallback } from "../ui/stroketext/stroketext.js";
-import { init as initStickers, destroy as destroyStickers, setCommitBlobCallback as setStickersCommitBlobCallback } from "../ui/stickers/stickers.js";
+import { init as initCurvedText, destroy as destroyCurvedText, setCommitBlobCallback } from "./tools/curvedtext.js";
+import { init as initStrokeText, destroy as destroyStrokeText, setCommitBlobCallback as setStrokeCommitBlobCallback } from "./tools/stroketext.js";
+import { init as initStickers, destroy as destroyStickers, setCommitBlobCallback as setStickersCommitBlobCallback } from "./tools/stickers.js";
 import { commitBlob, pushHistory } from "./file-handler.js";
+
+const DEFAULT_TOOL = "crop";
+
+function getToolSwitcher() {
+  return document.querySelector("#tool-switcher");
+}
+
+function isKnownTool(tool) {
+  const switcher = getToolSwitcher();
+  if (!switcher) return false;
+  return Array.from(switcher.options).some((option) => option.value === tool);
+}
+
+function normalizeTool(tool) {
+  return isKnownTool(tool) ? tool : DEFAULT_TOOL;
+}
+
+function parseToolFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return normalizeTool(params.get("tool") || DEFAULT_TOOL);
+}
+
+function updateToolInUrl(tool, replace = false) {
+  const normalizedTool = normalizeTool(tool);
+  const url = new URL(window.location.href);
+  const hasToolParam = url.searchParams.has("tool");
+  const current = normalizeTool(url.searchParams.get("tool") || DEFAULT_TOOL);
+  if (hasToolParam && current === normalizedTool) return;
+
+  url.searchParams.set("tool", normalizedTool);
+  if (replace) {
+    history.replaceState(null, "", url.toString());
+    return;
+  }
+  history.pushState(null, "", url.toString());
+}
+
+function applyToolFromUrl() {
+  const tool = parseToolFromUrl();
+  const appEl = document.querySelector(".app");
+  const switcher = getToolSwitcher();
+
+  if (appEl) appEl.dataset.view = "editor";
+
+  if (appEl?.dataset.view === "editor" && switcher?.value === tool) {
+    return;
+  }
+
+  switchToEditor(tool, { updateRouteState: false });
+}
 
 export function syncUndoButtons() {
   const disabled = !state.current || state.busy;
@@ -594,32 +644,71 @@ export async function activateTool(tool) {
   }
 }
 
-export function switchToEditor(tool) {
+export function switchToEditor(tool, options = {}) {
+  const { updateRouteState = true, replaceRoute = false } = options;
+  const normalizedTool = normalizeTool(tool);
   const appEl = document.querySelector(".app");
-  appEl.dataset.view = "editor";
-  activateTool(tool);
+  if (appEl) appEl.dataset.view = "editor";
+  activateTool(normalizedTool);
+
+  if (updateRouteState) {
+    updateToolInUrl(normalizedTool, replaceRoute);
+  }
 }
 
-export function switchToLanding() {
+export function switchToLanding(options = {}) {
+  const { updateRouteState = true } = options;
+  const hasLandingView = !!document.querySelector(".view-landing");
+
+  if (!hasLandingView) {
+    window.location.href = "./index.html";
+    return;
+  }
+
   const appEl = document.querySelector(".app");
-  appEl.dataset.view = "landing";
+  if (appEl) appEl.dataset.view = "landing";
+
+  if (updateRouteState) {
+    history.replaceState(null, "", "./index.html");
+  }
 }
 
 export function initViewSwitching() {
   document.querySelectorAll(".tool-card").forEach((card) => {
     card.addEventListener("click", () => {
-      switchToEditor(card.dataset.selectTool);
+      const normalizedTool = normalizeTool(card.dataset.selectTool);
+      window.location.href = `./editor.html?tool=${encodeURIComponent(normalizedTool)}`;
     });
   });
 
-  document.querySelector("#back-to-landing").addEventListener("click", switchToLanding);
+  const backButton = document.querySelector("#back-to-landing");
+  if (backButton) backButton.addEventListener("click", switchToLanding);
 }
 
 export function initToolSwitcher() {
   const toolSwitcher = document.querySelector("#tool-switcher");
   toolSwitcher.addEventListener("change", () => {
-    activateTool(toolSwitcher.value);
+    switchToEditor(toolSwitcher.value);
   });
+}
+
+export function initRouteState() {
+  if (!getToolSwitcher()) return;
+
+  window.addEventListener("popstate", applyToolFromUrl);
+
+  if (window.location.protocol === "file:") {
+    const note = document.querySelector("#editor-file-protocol-note");
+    if (note) note.hidden = false;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has("tool")) {
+    switchToEditor(DEFAULT_TOOL, { updateRouteState: true, replaceRoute: true });
+    return;
+  }
+
+  applyToolFromUrl();
 }
 
 export function initWindowResize() {

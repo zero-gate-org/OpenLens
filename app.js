@@ -12,6 +12,7 @@ import {
   switchToEditor, 
   initViewSwitching, 
   initToolSwitcher, 
+  initRouteState,
   initWindowResize 
 } from "./modules/ui-controller.js";
 
@@ -35,7 +36,7 @@ import { initFilmGrainListeners } from "./modules/tools/film-grain.js";
 import { initLomoListeners } from "./modules/tools/lomo.js";
 import { initOilPaintListeners } from "./modules/tools/oil-paint.js";
 import { initSketchListeners } from "./modules/tools/sketch.js";
-import { init as initStickers, destroy as destroyStickers, setCommitBlobCallback as setStickersCommitBlobCallback } from "./ui/stickers/stickers.js";
+import { init as initStickers, destroy as destroyStickers, setCommitBlobCallback as setStickersCommitBlobCallback } from "./modules/tools/stickers.js";
 
 // Wrapper for commitBlob that includes rendering
 async function commitBlobWithRender(blob, label, name) {
@@ -146,6 +147,7 @@ function init() {
   initToolListeners();
   initViewSwitching();
   initToolSwitcher();
+  initRouteState();
   initWindowResize();
   syncUndoButtons();
 }
