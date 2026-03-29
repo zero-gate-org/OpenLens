@@ -1,0 +1,224 @@
+/* ========================================
+   PHOTO FRAME
+   ======================================== */
+
+/* Frame type selector cards */
+.pf-frame-types {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.pf-frame-card {
+  appearance: none;
+  background: var(--surface-raised, #1a1d21);
+  border: 1px solid var(--line, #2a2d31);
+  border-radius: 8px;
+  padding: 6px 4px 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.pf-frame-card span {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: var(--muted, #888);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.pf-frame-card:hover {
+  border-color: var(--accent, #00e68a);
+  background: var(--surface-raised, #1e2126);
+}
+
+.pf-frame-card.is-active {
+  border-color: var(--accent, #00e68a);
+  background: rgba(0, 230, 138, 0.08);
+}
+
+.pf-frame-card.is-active span {
+  color: var(--accent, #00e68a);
+}
+
+/* Thumbnail previews */
+.pf-thumb {
+  width: 40px;
+  height: 52px;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pf-thumb-polaroid {
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.2);
+}
+.pf-thumb-polaroid::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 2px;
+  right: 2px;
+  height: 14px;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.pf-thumb-filmstrip {
+  background: #222;
+  border: 2px solid #111;
+}
+.pf-thumb-filmstrip::before,
+.pf-thumb-filmstrip::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  width: 5px;
+  height: 7px;
+  background: #555;
+  border-radius: 1px;
+}
+.pf-thumb-filmstrip::before { left: 1px; }
+.pf-thumb-filmstrip::after { right: 1px; }
+
+.pf-thumb-vintage {
+  background: #f5f0e8;
+  border: 2px solid #8B7355;
+  padding: 3px;
+}
+.pf-thumb-vintage::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #d4c9b8;
+  border: 1px solid #8B7355;
+}
+
+.pf-thumb-passport {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 3px;
+}
+.pf-thumb-passport::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #eee;
+  border: 1px dashed #bbb;
+  border-radius: 50%;
+}
+
+.pf-thumb-instax {
+  background: #fff;
+  border: 2px solid #e8e8e8;
+  border-radius: 3px;
+}
+.pf-thumb-instax::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 2px;
+  right: 2px;
+  height: 10px;
+  background: linear-gradient(to bottom, #fff, #f5f0e6);
+  border-top: 1px solid #eee;
+}
+
+.pf-thumb-magazine {
+  background: #fff;
+  border: none;
+  clip-path: polygon(2% 0%, 98% 1%, 100% 3%, 99% 97%, 97% 100%, 3% 99%, 0% 96%, 1% 2%);
+}
+
+.pf-thumb-neon {
+  background: #0a0a0a;
+  border: 2px solid #00ffff;
+  box-shadow: 0 0 4px #00ffff, inset 0 0 4px rgba(0,255,255,0.2);
+}
+
+.pf-thumb-decorative {
+  background: #fff;
+  border: 3px solid #c9a84c;
+  outline: 1px solid #a08030;
+  outline-offset: 1px;
+}
+
+/* Neon color swatches */
+.pf-neon-swatches {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.pf-neon-swatch {
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 160ms ease, transform 120ms ease;
+}
+
+.pf-neon-swatch:hover {
+  transform: scale(1.15);
+}
+
+.pf-neon-swatch.is-active {
+  border-color: #fff;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* Presets */
+.pf-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pf-preset-btn {
+  appearance: none;
+  background: var(--surface-raised, #1a1d21);
+  border: 1px solid var(--line, #2a2d31);
+  border-radius: 14px;
+  padding: 3px 10px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--muted, #888);
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+  letter-spacing: 0.02em;
+}
+
+.pf-preset-btn:hover {
+  border-color: var(--accent, #00e68a);
+  color: var(--text, #e0e0e0);
+  background: rgba(0, 230, 138, 0.06);
+}
+
+/* Preview canvas area */
+.pf-preview-wrap {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: repeating-conic-gradient(#1a1d21 0% 25%, #15181c 0% 50%) 50% / 16px 16px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.pf-preview-canvas {
+  max-width: 100%;
+  max-height: 300px;
+  display: block;
+}

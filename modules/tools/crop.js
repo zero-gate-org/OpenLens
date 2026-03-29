@@ -9,6 +9,13 @@ export function destroyCropper() {
     state.cropper.destroy();
     state.cropper = null;
   }
+
+  // Cropper can leave visibility classes on the base image during fast tool switches.
+  // Clear them so non-crop tools always render the preview image.
+  if (dom.cropImage) {
+    dom.cropImage.classList.remove("cropper-hidden", "cropper-hide");
+    dom.cropImage.removeAttribute("aria-hidden");
+  }
 }
 
 export function ensureCropper() {

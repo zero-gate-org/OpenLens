@@ -17,6 +17,7 @@ import { activateLomoTool, deactivateLomoTool, clearLomoCache } from "./tools/lo
 import { activateOilPaintTool, deactivateOilPaintTool } from "./tools/oil-paint.js";
 import { activateSketchTool, deactivateSketchTool, clearSketchCache } from "./tools/sketch.js";
 import { activateWatermarkTool, deactivateWatermarkTool, clearWatermarkCache } from "./tools/watermark.js";
+import { activatePhotoFrameTool, deactivatePhotoFrameTool } from "./tools/photo-frame.js";
 import { init as initCurvedText, destroy as destroyCurvedText, setCommitBlobCallback } from "./tools/curvedtext.js";
 import { init as initStrokeText, destroy as destroyStrokeText, setCommitBlobCallback as setStrokeCommitBlobCallback } from "./tools/stroketext.js";
 import { init as initStickers, destroy as destroyStickers, setCommitBlobCallback as setStickersCommitBlobCallback } from "./tools/stickers.js";
@@ -130,6 +131,7 @@ export async function renderCurrentImage(toolSwitcher) {
     if (toolSwitcher?.value === "oilpaint") await activateOilPaintTool();
     if (toolSwitcher?.value === "sketch") await activateSketchTool();
     if (toolSwitcher?.value === "watermark") await activateWatermarkTool();
+    if (toolSwitcher?.value === "photoframe") await activatePhotoFrameTool();
   } else if (isTextoverlayActive) {
     tvoDestroy();
     deactivateBlurTool();
@@ -286,6 +288,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await tvoInitAsync(syncUndoButtons);
     }
@@ -320,6 +323,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     fitCanvasToImagePreview();
     ensureCropper();
   } else if (tool === "blur") {
@@ -337,6 +341,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateBlurTool();
     }
@@ -355,6 +360,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateTiltShiftTool();
     }
@@ -373,6 +379,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateSplashTool();
     }
@@ -391,6 +398,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateShadowTool();
     }
@@ -409,6 +417,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateDuotoneTool();
     }
@@ -427,6 +436,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateGradientMapTool();
     }
@@ -445,6 +455,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateHalftoneTool();
     }
@@ -463,6 +474,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateChromaticAberrationTool();
     }
@@ -481,6 +493,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateGlitchTool();
     }
@@ -499,6 +512,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateFilmGrainTool();
     }
@@ -517,6 +531,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateLomoTool();
     }
@@ -535,6 +550,7 @@ export async function activateTool(tool) {
     deactivateLomoTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     if (state.current) {
       await activateOilPaintTool();
     }
@@ -572,6 +588,7 @@ export async function activateTool(tool) {
     deactivateLomoTool();
     deactivateOilPaintTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     tvoDestroy();
     destroyCurvedText();
     destroyStrokeText();
@@ -596,6 +613,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     tvoDestroy();
 
     document.querySelectorAll(".sidebar-panel").forEach((p) => {
@@ -635,6 +653,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     tvoDestroy();
 
     document.querySelectorAll(".sidebar-panel").forEach((p) => {
@@ -675,6 +694,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     tvoDestroy();
 
     document.querySelectorAll(".sidebar-panel").forEach((p) => {
@@ -716,6 +736,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     tvoDestroy();
 
     document.querySelectorAll(".sidebar-panel").forEach((p) => {
@@ -738,6 +759,30 @@ export async function activateTool(tool) {
       }));
     }
     return;
+  } else if (tool === "photoframe") {
+    destroyCropper();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateGradientMapTool();
+    deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
+    deactivateGlitchTool();
+    deactivateFilmGrainTool();
+    deactivateLomoTool();
+    deactivateOilPaintTool();
+    deactivateWatermarkTool();
+    deactivateSketchTool();
+    tvoDestroy();
+    destroyCurvedText();
+    destroyStrokeText();
+    destroyStickers();
+    destroyPatternText();
+    if (state.current) {
+      await activatePhotoFrameTool();
+    }
   } else {
     destroyCropper();
     deactivateBlurTool();
@@ -754,6 +799,7 @@ export async function activateTool(tool) {
     deactivateOilPaintTool();
     deactivateWatermarkTool();
     deactivateSketchTool();
+    deactivatePhotoFrameTool();
     destroyCurvedText();
     destroyStrokeText();
     destroyStickers();

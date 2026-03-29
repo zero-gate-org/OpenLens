@@ -22,6 +22,7 @@ import stroketextPanel from "../../ui/stroketext/panel.js";
 import stickersPanel from "../../ui/stickers/panel.js";
 import patterntextPanel from "../../ui/patterntext/panel.js";
 import watermarkPanel from "../../ui/watermark/panel.js";
+import photoframePanel from "../../ui/photo-frame/panel.js";
 
 export const PANEL_MARKUP_BY_TOOL = {
   "crop": cropPanel,
@@ -48,6 +49,7 @@ export const PANEL_MARKUP_BY_TOOL = {
   "stickers": stickersPanel,
   "patterntext": patterntextPanel,
   "watermark": watermarkPanel,
+  "photoframe": photoframePanel,
 };
 
 export const PANEL_ORDER = [
@@ -75,6 +77,7 @@ export const PANEL_ORDER = [
   "stickers",
   "patterntext",
   "watermark",
+  "photoframe",
 ];
 
 export function buildPanelsMarkup() {
