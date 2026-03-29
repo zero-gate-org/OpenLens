@@ -120,12 +120,17 @@ Editor startup sequence:
 │  │  ├─ curvedtext.js         # Curved text effect logic
 │  │  ├─ stroketext.js         # Stroke text effect logic
 │  │  ├─ stickers.js           # Stickers logic
-│  │  └─ svg-stickers.js       # Sticker SVG dataset
+│  │  ├─ svg-stickers.js       # Sticker SVG dataset
+│  │  ├─ tool-runtime.js       # Facade for tool runtime orchestration
+│  │  └─ runtime/
+│  │     ├─ activate-runtime.js # Tool activation/deactivation lifecycle
+│  │     ├─ render-runtime.js   # Tool render-time lifecycle after image updates
+│  │     └─ shared.js           # Shared runtime helpers
 │  ├─ editor-panels/
 │  │  ├─ index.js              # Registry: tool -> panel markup module
 │  │  └─ mount.js              # Injects panel markup into editor shell
 │  ├─ file-handler.js          # File load/commit/undo/reset/download
-│  └─ ui-controller.js         # Tool activation + route synchronization
+│  └─ ui-controller.js         # Route/view sync and runtime delegation
 ├─ ui/
 │  ├─ <tool-folder>/panel.js   # Panel markup module for that tool
 │  ├─ <tool-folder>/*.css      # Tool-specific styles
@@ -151,7 +156,9 @@ Tool behavior lives in `modules/tools/*.js`.
 - `ui/*/panel.js`: Tool panel markup
 - `ui/*/*.css`: Tool panel visual styling
 - `modules/tools/*.js`: Effect logic and processing
-- `modules/ui-controller.js`: Tool switching and route syncing
+- `modules/tools/runtime/*.js`: Tool lifecycle orchestration (activate/render/deactivate)
+- `modules/tools/tool-runtime.js`: Stable facade imported by UI controller
+- `modules/ui-controller.js`: Tool switch UI + route syncing + runtime delegation
 - `modules/file-handler.js`: File operations + history changes
 
 ### Adding A New Tool (Contributor Checklist)
@@ -162,7 +169,8 @@ Tool behavior lives in `modules/tools/*.js`.
 4. Register panel in `modules/editor-panels/index.js`
 5. Add switch option in `editor.html`
 6. Hook listener init in `app.js`
-7. Hook activation/deactivation flow in `modules/ui-controller.js`
+7. Hook tool lifecycle in `modules/tools/runtime/activate-runtime.js` and `modules/tools/runtime/render-runtime.js`
+8. Update `modules/ui-controller.js` only if route or tool switch UX behavior changes
 
 ### Local Development
 

@@ -57,6 +57,11 @@ Back navigation:
 
 - All tool logic and processing code.
 - Includes heavy logic modules and optional worker files.
+- Tool lifecycle orchestration is split into:
+   - `modules/tools/tool-runtime.js` (facade import for UI controller)
+   - `modules/tools/runtime/activate-runtime.js` (activation/deactivation flow)
+   - `modules/tools/runtime/render-runtime.js` (render-time reactivation flow)
+   - `modules/tools/runtime/shared.js` (shared helper utilities)
 - Examples: crop/resize/rotate/etc plus `curvedtext.js`, `stroketext.js`, `stickers.js`, `svg-stickers.js`.
 
 ### `modules/editor-panels/`
@@ -98,7 +103,9 @@ When creating a new tool `newtool`, do all of the following:
    - Import and call `initNewToolListeners(...)` in `app.js`.
 
 6. Wire activation/deactivation:
-   - Update `modules/ui-controller.js` in `activateTool(...)` flow.
+   - Update `modules/tools/runtime/activate-runtime.js` for tool switching lifecycle.
+   - Update `modules/tools/runtime/render-runtime.js` for render-time lifecycle.
+   - Keep `modules/ui-controller.js` focused on route/view orchestration.
 
 7. Add DOM refs (if needed):
    - Add element refs in `modules/core/dom.js`.
@@ -155,6 +162,6 @@ Open:
 When architecture/routing changes, update both:
 
 - `README.md`
-- `agents.md`
+- `AGENTS.md`
 
 Keep these two documents aligned so contributors and coding agents follow the same structure.
