@@ -20,6 +20,7 @@ import textoverlayPanel from "../../ui/textoverlay/panel.js";
 import curvedtextPanel from "../../ui/curvedtext/panel.js";
 import stroketextPanel from "../../ui/stroketext/panel.js";
 import stickersPanel from "../../ui/stickers/panel.js";
+import patterntextPanel from "../../ui/patterntext/panel.js";
 
 export const PANEL_MARKUP_BY_TOOL = {
   "crop": cropPanel,
@@ -44,6 +45,7 @@ export const PANEL_MARKUP_BY_TOOL = {
   "curvedtext": curvedtextPanel,
   "stroketext": stroketextPanel,
   "stickers": stickersPanel,
+  "patterntext": patterntextPanel,
 };
 
 export const PANEL_ORDER = [
@@ -69,6 +71,7 @@ export const PANEL_ORDER = [
   "curvedtext",
   "stroketext",
   "stickers",
+  "patterntext",
 ];
 
 export function buildPanelsMarkup() {

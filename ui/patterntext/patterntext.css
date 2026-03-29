@@ -1,0 +1,243 @@
+/* ========================================
+   PATTERN TEXT MODULE
+   ======================================== */
+
+/* --- Canvas layer stack --- */
+.pt-canvas-stack {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.pt-canvas-stack canvas {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 48px - 48px);
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+}
+
+.pt-canvas-stack .pt-base-canvas {
+  position: relative;
+  z-index: 1;
+}
+
+.pt-canvas-stack .pt-text-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.pt-canvas-stack .pt-overlay-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+/* --- Pattern type grid --- */
+.pt-pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.pt-pattern-card {
+  cursor: pointer;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 120ms ease, transform 120ms ease;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.pt-pattern-card:hover {
+  border-color: rgba(171, 255, 203, 0.4);
+  transform: translateY(-1px);
+}
+
+.pt-pattern-card:active {
+  transform: translateY(0);
+}
+
+.pt-pattern-card.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 8px rgba(171, 255, 203, 0.25);
+}
+
+.pt-pattern-thumb {
+  width: 100%;
+  aspect-ratio: 1;
+  line-height: 0;
+}
+
+.pt-pattern-thumb canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.pt-pattern-name {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  padding: 2px 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* --- Alignment radio group --- */
+.pt-align-group {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.pt-align-btn {
+  flex: 1;
+  padding: 5px 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-align: center;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.pt-align-btn:not(:last-child) {
+  border-right: 1px solid var(--line);
+}
+
+.pt-align-btn:hover {
+  background: rgba(171, 255, 203, 0.06);
+}
+
+.pt-align-btn.active {
+  background: rgba(171, 255, 203, 0.12);
+  color: var(--accent);
+}
+
+/* --- Preset cards row --- */
+.pt-presets-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(171, 255, 203, 0.2) transparent;
+}
+
+.pt-presets-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.pt-presets-row::-webkit-scrollbar-thumb {
+  background: rgba(171, 255, 203, 0.2);
+  border-radius: 2px;
+}
+
+.pt-preset-card {
+  flex-shrink: 0;
+  width: 80px;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 120ms ease, transform 120ms ease;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.pt-preset-card:hover {
+  border-color: rgba(171, 255, 203, 0.4);
+  transform: translateY(-1px);
+}
+
+.pt-preset-card:active {
+  transform: translateY(0);
+}
+
+.pt-preset-thumb {
+  width: 80px;
+  height: 40px;
+  line-height: 0;
+}
+
+.pt-preset-thumb canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.pt-preset-name {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  padding: 3px 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+}
+
+/* --- Subsection styling --- */
+.pt-subsection {
+  padding-left: 10px;
+  border-left: 2px solid var(--line);
+  margin-left: 2px;
+  margin-bottom: 2px;
+}
+
+/* --- Dynamic pattern controls panel --- */
+.pt-pattern-controls {
+  transition: opacity 150ms ease;
+}
+
+/* --- Stamp pad --- */
+.pt-stamp-pad {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.pt-stamp-pad canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.pt-stamp-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+/* --- Conditional sections --- */
+.pt-stroke-section,
+.pt-shadow-section,
+.pt-bg-section {
+  transition: opacity 120ms ease;
+}

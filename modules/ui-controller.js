@@ -19,6 +19,7 @@ import { activateSketchTool, deactivateSketchTool, clearSketchCache } from "./to
 import { init as initCurvedText, destroy as destroyCurvedText, setCommitBlobCallback } from "./tools/curvedtext.js";
 import { init as initStrokeText, destroy as destroyStrokeText, setCommitBlobCallback as setStrokeCommitBlobCallback } from "./tools/stroketext.js";
 import { init as initStickers, destroy as destroyStickers, setCommitBlobCallback as setStickersCommitBlobCallback } from "./tools/stickers.js";
+import { init as initPatternText, destroy as destroyPatternText, setCommitBlobCallback as setPatternTextCommitBlobCallback } from "./tools/pattern-text.js";
 import { commitBlob, pushHistory } from "./file-handler.js";
 
 const DEFAULT_TOOL = "crop";
@@ -98,10 +99,12 @@ export async function renderCurrentImage(toolSwitcher) {
   const isCurvedtextActive = toolSwitcher?.value === "curvedtext";
   const isStroketextActive = toolSwitcher?.value === "stroketext";
   const isStickersActive = toolSwitcher?.value === "stickers";
+  const isPatternTextActive = toolSwitcher?.value === "patterntext";
 
-  if (!isTextoverlayActive && !isCurvedtextActive && !isStroketextActive && !isStickersActive) {
+  if (!isTextoverlayActive && !isCurvedtextActive && !isStroketextActive && !isStickersActive && !isPatternTextActive) {
     destroyCropper();
     destroyStickers();
+    destroyPatternText();
     deactivateBlurTool();
     deactivateTiltShiftTool();
     await new Promise((resolve, reject) => {
@@ -179,6 +182,7 @@ export async function renderCurrentImage(toolSwitcher) {
       await renderCurrentImage(document.querySelector("#tool-switcher"));
     }));
   } else if (isStickersActive) {
+    destroyPatternText();
     destroyStickers();
     destroyStrokeText();
     destroyCurvedText();
@@ -200,6 +204,31 @@ export async function renderCurrentImage(toolSwitcher) {
       () => pushHistory("Stickers")
     );
     setStickersCommitBlobCallback((blob, label, name) => commitBlob(blob, label, name, async () => {
+      await renderCurrentImage(document.querySelector("#tool-switcher"));
+    }));
+  } else if (isPatternTextActive) {
+    destroyPatternText();
+    destroyStickers();
+    destroyStrokeText();
+    destroyCurvedText();
+    tvoDestroy();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    await new Promise((resolve, reject) => {
+      dom.cropImage.onload = resolve;
+      dom.cropImage.onerror = reject;
+      dom.cropImage.src = state.current.previewUrl;
+    });
+    fitCanvasToImagePreview();
+    dom.cropSurface.style.display = "";
+    initPatternText(
+      dom.cropImage,
+      () => state.current ? { ...state.current } : null,
+      () => pushHistory("Pattern Text")
+    );
+    setPatternTextCommitBlobCallback((blob, label, name) => commitBlob(blob, label, name, async () => {
       await renderCurrentImage(document.querySelector("#tool-switcher"));
     }));
   }
@@ -239,6 +268,7 @@ export async function activateTool(tool) {
     destroyCurvedText();
     destroyStrokeText();
     destroyStickers();
+    destroyPatternText();
     deactivateBlurTool();
     deactivateTiltShiftTool();
     deactivateSplashTool();
@@ -262,6 +292,7 @@ export async function activateTool(tool) {
   destroyCurvedText();
   destroyStrokeText();
   destroyStickers();
+  destroyPatternText();
   dom.cropSurface.style.display = "";
 
   document.querySelectorAll(".sidebar-panel").forEach((p) => {
@@ -623,6 +654,46 @@ export async function activateTool(tool) {
       }));
     }
     return;
+  } else if (tool === "patterntext") {
+    destroyCropper();
+    destroyCurvedText();
+    destroyStrokeText();
+    destroyStickers();
+    deactivateBlurTool();
+    deactivateTiltShiftTool();
+    deactivateSplashTool();
+    deactivateShadowTool();
+    deactivateDuotoneTool();
+    deactivateGradientMapTool();
+    deactivateHalftoneTool();
+    deactivateChromaticAberrationTool();
+    deactivateGlitchTool();
+    deactivateFilmGrainTool();
+    deactivateLomoTool();
+    deactivateOilPaintTool();
+    deactivateSketchTool();
+    tvoDestroy();
+
+    document.querySelectorAll(".sidebar-panel").forEach((p) => {
+      p.classList.toggle("is-active", p.dataset.panel === tool);
+    });
+    const toolSwitcher = document.querySelector("#tool-switcher");
+    if (toolSwitcher.value !== tool) toolSwitcher.value = tool;
+
+    if (state.current) {
+      dom.cropSurface.style.display = "";
+      fitCanvasToImagePreview();
+      const baseCanvas = dom.cropImage;
+      initPatternText(
+        baseCanvas,
+        () => state.current ? { ...state.current } : null,
+        () => pushHistory("Pattern Text")
+      );
+      setPatternTextCommitBlobCallback((blob, label, name) => commitBlob(blob, label, name, async () => {
+        await renderCurrentImage(document.querySelector("#tool-switcher"));
+      }));
+    }
+    return;
   } else {
     destroyCropper();
     deactivateBlurTool();
@@ -641,6 +712,7 @@ export async function activateTool(tool) {
     destroyCurvedText();
     destroyStrokeText();
     destroyStickers();
+    destroyPatternText();
   }
 }
 
