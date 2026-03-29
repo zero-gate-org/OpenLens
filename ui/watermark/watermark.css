@@ -1,0 +1,218 @@
+/* ========================================
+   WATERMARK TOOL
+   ======================================== */
+
+/* Type toggle (Text / Image / Tiled) */
+.wm-type-group {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.wm-type-btn {
+  flex: 1;
+  appearance: none;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 0;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  letter-spacing: var(--tracking-tight);
+  transition: all 160ms ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.wm-type-btn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.wm-type-btn.active {
+  color: var(--accent);
+  background: rgba(171, 255, 203, 0.1);
+  border-color: rgba(171, 255, 203, 0.25);
+}
+
+.wm-type-radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+/* Text style toggles (Bold / Italic) */
+.wm-style-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.wm-style-toggle {
+  cursor: pointer;
+}
+
+.wm-style-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.wm-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--muted);
+  transition: all 140ms ease;
+  user-select: none;
+}
+
+.wm-toggle-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.wm-style-toggle input:checked + .wm-toggle-btn {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(171, 255, 203, 0.1);
+}
+
+/* Stroke controls */
+.wm-stroke-controls {
+  padding-left: 12px;
+  border-left: 2px solid var(--line);
+  margin-left: 4px;
+}
+
+/* Upload area */
+.wm-upload-area {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wm-image-name {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Position grid - 3x3 numpad style */
+.wm-position-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.wm-pos-btn {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 140ms ease;
+  text-align: center;
+  line-height: 1;
+}
+
+.wm-pos-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.wm-pos-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(171, 255, 203, 0.12);
+  box-shadow: 0 0 8px rgba(171, 255, 203, 0.15);
+}
+
+/* Saved preset row */
+.wm-preset-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+/* Quick presets */
+.wm-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wm-preset-btn {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  transition: border-color 160ms ease, transform 120ms ease, color 160ms ease;
+  white-space: nowrap;
+}
+
+.wm-preset-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.wm-preset-btn:active {
+  transform: translateY(0);
+}
+
+/* Tab content transitions */
+.wm-tab-content {
+  transition: opacity 160ms ease;
+}
+
+/* Sidebar input for text fields */
+.sidebar-input {
+  width: 100%;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  outline: none;
+  transition: border-color 160ms ease;
+}
+
+.sidebar-input:focus {
+  border-color: var(--accent);
+}
+
+.sidebar-input::placeholder {
+  color: var(--muted);
+}

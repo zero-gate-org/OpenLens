@@ -16,6 +16,7 @@ import { clearFilmGrainCache } from "./tools/film-grain.js";
 import { clearOilPaintCache } from "./tools/oil-paint.js";
 import { destroy as destroyCurvedText } from "./tools/curvedtext.js";
 import { destroy as destroyStickers } from "./tools/stickers.js";
+import { clearWatermarkCache } from "./tools/watermark.js";
 
 export function pushHistory(label) {
   if (!state.current) return;
@@ -58,6 +59,7 @@ export function discardImage() {
   tvoDestroy();
   destroyCurvedText();
   destroyStickers();
+  clearWatermarkCache();
 
   // Revoke object URLs
   if (state.current?.previewUrl) revokeUrl(state.current.previewUrl);
@@ -131,6 +133,7 @@ export async function loadFile(file, switchToEditorCallback, renderCallback) {
   clearOilPaintCache();
   destroyCurvedText();
   destroyStickers();
+  clearWatermarkCache();
   clearHistory();
     state.original = createImageState({
       blob: file,

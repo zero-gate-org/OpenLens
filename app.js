@@ -38,6 +38,7 @@ import { initOilPaintListeners } from "./modules/tools/oil-paint.js";
 import { initSketchListeners } from "./modules/tools/sketch.js";
 import { init as initStickers, destroy as destroyStickers, setCommitBlobCallback as setStickersCommitBlobCallback } from "./modules/tools/stickers.js";
 import { init as initPatternText, destroy as destroyPatternText, setCommitBlobCallback as setPatternTextCommitBlobCallback } from "./modules/tools/pattern-text.js";
+import { initWatermarkListeners } from "./modules/tools/watermark.js";
 
 // Wrapper for commitBlob that includes rendering
 async function commitBlobWithRender(blob, label, name) {
@@ -139,6 +140,7 @@ function initToolListeners() {
   initLomoListeners(commitBlobWithRender);
   initOilPaintListeners(commitBlobWithRender);
   initSketchListeners(commitBlobWithRender);
+  initWatermarkListeners(commitBlobWithRender);
 }
 
 // Initialize the application
