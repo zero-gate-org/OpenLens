@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="OpenLens.png" alt="OpenLens Logo" width="120" height="120">
+  <img src="openlens.png" alt="OpenLens Logo" width="120" height="120">
 </p>
 
 <h1 align="center">OpenLens</h1>
@@ -12,185 +12,127 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
-  <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
+  <img src="https://img.shields.io/badge/svelte-%23ff3e00.svg?style=for-the-badge&logo=svelte&logoColor=white" alt="Svelte">
+  <img src="https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
   <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript">
 </p>
 
 <p align="center">
-  <strong>Static browser-based image editor built with plain HTML, CSS, and JavaScript.</strong>
+  <strong>Browser-based photo editing tools that run locally in your browser, with no uploads and no server-side processing.</strong>
 </p>
 
 ---
 
-##  Features
+## Overview
 
-- **Crop & Resize**: Interactive selection with aspect-ratio lock.
-- **Rotate**: Rotate by 90 degrees or fine-tune with a custom angle.
-- **Convert**: Seamlessly switch between PNG, JPEG, and WebP formats.
-- **Compress**: Optimize JPEG and WebP images with a quality slider.
-- **Privacy-First BG Remove**: Remove backgrounds locally in the browser with IMG.LY's on-device AI.
-- **Text Behind Object**: Layer text behind a foreground object for cinematic compositing (powered by Fabric.js).
-- **No Uploads**: Images stay on your machine—zero latency, enhanced security.
+OpenLens is a privacy-first image editor rebuilt in Svelte. It lets you make fast, on-device edits such as cropping, resizing, rotating, applying creative effects, and removing backgrounds without sending your images anywhere.
 
-##  Deployment
+The app is designed to be lightweight, static, and hostable anywhere, while still supporting a rich editor experience in the browser.
 
-This project is fully static and GitHub Pages friendly. Current core runtime files are:
+## Features
 
-- `index.html` (landing route)
-- `editor.html` (editor route)
-- `editor-app.js` (editor bootstrap)
-- `app.js` (app init)
-- `styles.css`
-- `modules/**`
-- `ui/**`
+- Crop and resize with interactive controls
+- Rotate by 90° or adjust with a custom angle
+- Convert between PNG, JPEG, and WebP
+- Compress JPEG and WebP output with quality controls
+- Remove backgrounds locally using browser-side AI
+- Add text effects, overlays, and layered compositions
+- Apply artistic filters and creative transformations
+- Keep all processing on-device for privacy and speed
 
-## Notes
+## Tech stack
 
-- **Dependencies**: `CropperJS`, `Pica`, and `Fabric.js` are loaded via CDN for powerful editing capabilities.
-- **AI Integration**: Background removal uses `@imgly/background-removal` via CDN, downloading model files to the browser cache on first use.
-- **Layer Compositing**: Text Behind Object uses Fabric.js for draggable layers, font controls, and real-time preview.
-- **Data Privacy**: All processing happens client-side. Your images are never uploaded to any server.
+- Svelte 5
+- Vite
+- JavaScript modules and component-based UI
+- Browser-only image processing
+- Local background removal via `@imgly/background-removal`
 
----
+## Local development
 
-## Contributor Guide: Routing, Structure, And Responsibilities
+### Prerequisites
 
-### Routing Strategy (No Confusion)
+- Node.js 18+ recommended
+- npm
 
-OpenLens uses two static HTML routes:
+### Install dependencies
 
-1. `index.html`
-- Landing page only.
-- Contains tool cards and project marketing sections.
-- Tool cards navigate to editor route using query params:
-  - Example: `editor.html?tool=glitch`
+```bash
+npm install
+```
 
-2. `editor.html`
-- Editor shell only.
-- Contains topbar, canvas/dropzone, and tool switcher.
-- Sidebar panel markup is mounted by JS at startup.
+### Start the dev server
 
-Editor route behavior:
+```bash
+npm run dev
+```
 
-- Tool selection is encoded in `?tool=...`.
-- Changing tools updates URL with `history.pushState`/`replaceState`.
-- No full page reload on tool switch.
-- In-memory image + history state remains intact.
+Then open the local Vite URL shown in the terminal, usually:
 
-Back navigation behavior:
+- http://localhost:5173
 
-- Editor back button navigates to `index.html`.
+### Production build
 
-`file://` behavior:
+```bash
+npm run build
+```
 
-- Gracefully handled with a visible note.
-- Primary supported usage is static hosting (`GitHub Pages` or local HTTP server).
+This builds the app and runs the landing-page prerender step.
 
-### Runtime Startup Flow
+### Preview the production build
 
-Editor startup sequence:
+```bash
+npm run preview
+```
 
-1. `editor.html` loads `editor-app.js`
-2. `editor-app.js` mounts sidebar panels into `.sidebar-panels`
-3. `editor-app.js` imports `app.js`
-4. `app.js` initializes file handlers, tool listeners, routing, and UI sync
+## Available scripts
 
-### Folder-Level Project Structure
+```bash
+npm run dev        # start the Vite development server
+npm run build      # production build + prerender landing page
+npm run build:app  # build app assets only
+npm run preview    # preview the production build
+npm run check      # run Svelte checks
+npm test           # run JavaScript unit tests
+npm run test:e2e   # run end-to-end checks
+npm run test:landing # run landing-page checks
+```
+
+## Project structure
 
 ```text
 .
-├─ index.html                  # Landing route
-├─ editor.html                 # Editor route shell
-├─ editor-app.js               # Mount panels, then load app.js
-├─ app.js                      # Main app initialization
-├─ styles.css                  # Shared/global CSS
-├─ modules/
-│  ├─ core/
-│  │  ├─ state.js              # Shared runtime state
-│  │  ├─ dom.js                # Central DOM refs
-│  │  ├─ utils.js              # Helper utilities
-│  │  └─ messages.js           # Status/help messages
-│  ├─ tools/                   # Tool logic implementations
-│  │  ├─ crop.js
-│  │  ├─ resize.js
-│  │  ├─ rotate.js
-│  │  ├─ convert.js
-│  │  ├─ ...
-│  │  ├─ curvedtext.js         # Curved text effect logic
-│  │  ├─ stroketext.js         # Stroke text effect logic
-│  │  ├─ stickers.js           # Stickers logic
-│  │  ├─ svg-stickers.js       # Sticker SVG dataset
-│  │  ├─ tool-runtime.js       # Facade for tool runtime orchestration
-│  │  └─ runtime/
-│  │     ├─ activate-runtime.js # Tool activation/deactivation lifecycle
-│  │     ├─ render-runtime.js   # Tool render-time lifecycle after image updates
-│  │     └─ shared.js           # Shared runtime helpers
-│  ├─ editor-panels/
-│  │  ├─ index.js              # Registry: tool -> panel markup module
-│  │  └─ mount.js              # Injects panel markup into editor shell
-│  ├─ file-handler.js          # File load/commit/undo/reset/download
-│  └─ ui-controller.js         # Route/view sync and runtime delegation
-├─ ui/
-│  ├─ <tool-folder>/panel.js   # Panel markup module for that tool
-│  ├─ <tool-folder>/*.css      # Tool-specific styles
-│  └─ ...
-└─ backups/                    # Local snapshots before major refactors
+├─ index.html                 # landing entry page
+├─ public/                   # static assets, manifest, landing media
+├─ src/
+│  ├─ App.svelte             # main app shell
+│  ├─ main.js                # app bootstrap
+│  ├─ landing/               # landing page Svelte components and styles
+│  ├─ lib/                  # editor logic and state modules
+│  └─ styles/               # shared styling tokens and base CSS
+├─ tests/                    # unit and integration tests
+├─ prerender-landing.mjs     # build-time landing page prerender script
+├─ svelte.config.js          # Svelte config
+├─ vite.config.js            # Vite config
+├─ package.json              # scripts and dependencies
+├─ jsconfig.json             # JS project config
+├─ LICENSE                   # AGPL v3 license
+└─ README.md
 ```
 
-### What `ui/*/panel.js` Does
+## Deployment notes
 
-Each tool folder in `ui/` has a `panel.js` file.
+OpenLens is a static client-side app and works well with any static host, including GitHub Pages and simple HTTP servers.
 
-Purpose:
+For local testing, you can also serve the built output with a static server, but the normal development workflow is to use Vite.
 
-- Exports the sidebar UI markup for that tool.
-- Used by `modules/editor-panels/index.js` for panel mounting.
+## Privacy and data handling
 
-It does not contain tool behavior logic.
-
-Tool behavior lives in `modules/tools/*.js`.
-
-### Separation Of Responsibilities
-
-- `ui/*/panel.js`: Tool panel markup
-- `ui/*/*.css`: Tool panel visual styling
-- `modules/tools/*.js`: Effect logic and processing
-- `modules/tools/runtime/*.js`: Tool lifecycle orchestration (activate/render/deactivate)
-- `modules/tools/tool-runtime.js`: Stable facade imported by UI controller
-- `modules/ui-controller.js`: Tool switch UI + route syncing + runtime delegation
-- `modules/file-handler.js`: File operations + history changes
-
-### Adding A New Tool (Contributor Checklist)
-
-1. Add logic in `modules/tools/<tool>.js`
-2. Add panel markup in `ui/<tool>/panel.js`
-3. Add panel CSS in `ui/<tool>/<tool>.css` if needed
-4. Register panel in `modules/editor-panels/index.js`
-5. Add switch option in `editor.html`
-6. Hook listener init in `app.js`
-7. Hook tool lifecycle in `modules/tools/runtime/activate-runtime.js` and `modules/tools/runtime/render-runtime.js`
-8. Update `modules/ui-controller.js` only if route or tool switch UX behavior changes
-
-### Local Development
-
-Run a static server:
-
-```bash
-python3 -m http.server 4173
-```
-
-Open:
-
-- `http://127.0.0.1:4173/index.html`
-- `http://127.0.0.1:4173/editor.html?tool=crop`
-
-### Static Hosting Compatibility
-
-- Designed for GitHub Pages and local HTTP static servers.
-- No build step required.
-- Keep relative paths and avoid server-side routing assumptions.
+- Images stay on the user's device
+- No uploads are required for editing
+- Background removal and processing run in the browser
+- No server-side image storage or processing is required for core workflows
 
 ## License
 
-This project is licensed under the **AGPLv3**. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the AGPL v3. See the [LICENSE](LICENSE) file for details.

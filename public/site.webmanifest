@@ -1,0 +1,17 @@
+{
+  "name": "OpenLens Studio",
+  "short_name": "OpenLens",
+  "description": "Twenty-five image tools that run in your browser. Nothing is uploaded.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0f11",
+  "theme_color": "#0b0f11",
+  "icons": [
+    { "src": "./favicon.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./icon-512.webp", "sizes": "512x512", "type": "image/webp" },
+    { "src": "./apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

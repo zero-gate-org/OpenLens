@@ -1,0 +1,140 @@
+/* =============================================================
+   Tool panel internals.
+
+   Global rather than scoped: these classes are the contract every tool
+   component styles itself against, so a new tool gets a consistent panel
+   without copying a block of CSS. See lib/registry.js.
+   ============================================================= */
+
+.tool {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+  min-height: 100%;
+}
+
+/* A labelled group of related controls. */
+.tool-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.tool-section > .micro-label {
+  display: block;
+}
+
+/* A short, factual note. One per section at most. */
+.tool-note {
+  margin: 0;
+  font-size: var(--t-xs);
+  line-height: 1.45;
+  color: var(--text-3);
+}
+
+/* A row of equal controls. */
+.tool-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+}
+
+.tool-row.thirds {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Horizontal strip of quick choices (scale presets, ratios). */
+.tool-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* Raised keys. Selected presses down into the panel, like a real toolbar. */
+.tool-chip {
+  display: inline-grid;
+  place-items: center;
+  height: 27px;
+  min-width: 44px;
+  padding: 0 var(--s-3);
+  background: linear-gradient(180deg, var(--surface-3), var(--surface-2));
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  box-shadow: var(--raise-1);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+  transition:
+    background var(--dur-1) var(--ease),
+    color var(--dur-1) var(--ease),
+    border-color var(--dur-1) var(--ease),
+    box-shadow var(--dur-1) var(--ease),
+    transform var(--dur-1) var(--ease);
+}
+
+.tool-chip:hover:not(:disabled) {
+  background: linear-gradient(180deg, var(--surface-4), var(--surface-3));
+  color: var(--text-1);
+  border-color: var(--line-3);
+  box-shadow: var(--raise-2);
+}
+
+.tool-chip:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: var(--press);
+}
+
+.tool-chip.on {
+  background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+  border-color: var(--accent-line);
+  color: var(--accent);
+  box-shadow:
+    inset 0 2px 4px rgba(2, 6, 8, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 1px var(--accent-dim);
+}
+
+.tool-chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Primary action, pinned to the bottom of the panel so its position never
+   moves between tools of different lengths. */
+.tool-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin-top: auto;
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line-1);
+}
+
+.tool-actions .tool-note {
+  text-align: center;
+}
+
+/* Result readout shown after a tool runs (e.g. new dimensions). */
+/* Inset plate: reads as information carved into the panel, not another
+   floating card competing with the controls. */
+.tool-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  box-shadow: var(--sink-1);
+  font-size: var(--t-xs);
+  color: var(--text-3);
+}
+
+.tool-result strong {
+  font-size: var(--t-sm);
+  font-weight: 650;
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+}

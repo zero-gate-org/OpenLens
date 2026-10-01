@@ -1,0 +1,29 @@
+{
+  "name": "openlens-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "OpenLens editor, rebuilt with Svelte 5. Client-side image editing, no uploads.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npm run prerender",
+    "build:app": "vite build",
+    "prerender": "node prerender-landing.mjs",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./jsconfig.json",
+    "test": "node --test \"tests/**/*.test.js\"",
+    "test:e2e": "node tests/e2e.mjs",
+    "test:landing": "node tests/landing.test.mjs"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "puppeteer-core": "^25.12.0",
+    "svelte": "^5.57.1",
+    "svelte-check": "^4.4.1",
+    "vite": "^8.3.1"
+  },
+  "dependencies": {
+    "@imgly/background-removal": "^1.7.0",
+    "phosphor-svelte": "^3.1.0"
+  }
+}

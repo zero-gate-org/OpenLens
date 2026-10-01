@@ -1,0 +1,158 @@
+/* =============================================================
+   OpenLens Studio — design tokens
+   -------------------------------------------------------------
+   One accent (mint), one neutral family (cool graphite), one
+   radius scale, one dark theme. Every component reads from here,
+   so a value is changed in exactly one place.
+
+   Why no theme toggle: this is a photo tool. A light chrome
+   changes how the operator judges an image (the surround tints
+   perception). The stage stays neutral dark so the picture is the
+   only source of colour on screen. One theme, no inversion.
+   ============================================================= */
+
+:root {
+  color-scheme: dark;
+
+  /* --- Surfaces ------------------------------------------- */
+  /* Cool graphite neutrals. All the same hue (≈195deg) so the
+     palette never drifts warm in one panel and cool in another. */
+  --surface-0: #0b0f11; /* app shell, stage backdrop */
+  --surface-1: #111619; /* sidebar, topbar */
+  --surface-2: #171d21; /* controls, inputs */
+  --surface-3: #212a2f; /* hover */
+  --surface-4: #2b353b; /* pressed / active track */
+
+  /* --- Lines ---------------------------------------------- */
+  --line-1: rgba(198, 216, 222, 0.11); /* hairlines, dividers */
+  --line-2: rgba(198, 216, 222, 0.2); /* control borders */
+  --line-3: rgba(198, 216, 222, 0.32); /* hover borders */
+
+  /* --- Text ----------------------------------------------- */
+  /* All three clear WCAG AA (4.5:1) against --surface-1 and
+     --surface-2. Measured, not eyeballed. */
+  --text-1: #eaf1ef; /* 15.1:1 on surface-1 */
+  --text-2: #a3b2b0; /*  8.4:1 on surface-1 */
+  --text-3: #7f908e; /*  5.4:1 on surface-1 */
+
+  /* --- Accent (single) ------------------------------------ */
+  /* Mint, carried over from the OpenLens brand but pulled back
+     from the neon #abffcb so it survives at large fill sizes. */
+  --accent: #6ee7a8;
+  --accent-strong: #4ad392;
+  --accent-dim: rgba(110, 231, 168, 0.14);
+  --accent-line: rgba(110, 231, 168, 0.34);
+  --accent-ink: #05231a; /* text on accent fill: 10.8:1 */
+
+  --danger: #ff8078;
+  --danger-dim: rgba(255, 128, 120, 0.14);
+  --warning: #ffc46b;
+
+  /* --- Radius (one scale) --------------------------------- */
+  /* Rule: 6px chips · 8px controls and buttons · 12px surfaces */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-pill: 999px;
+
+  /* --- Spacing -------------------------------------------- */
+  --s-1: 4px;
+  --s-2: 6px;
+  --s-3: 8px;
+  --s-4: 12px;
+  --s-5: 16px;
+  --s-6: 20px;
+  --s-7: 24px;
+  --s-8: 32px;
+
+  /* --- Type ----------------------------------------------- */
+  /* System stack on purpose: zero network, zero FOUT, zero CLS,
+     and it renders at small sizes in a dense tool UI better than
+     a webfont. Numerals are tabular everywhere (see base.css). */
+  --font-ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  --t-micro: 10.5px; /* uppercase meta labels */
+  --t-xs: 11.5px;
+  --t-sm: 12.5px;
+  --t-md: 13.5px;
+  --t-lg: 15px;
+  --t-xl: 19px;
+  --t-2xl: 24px;
+
+  --tracking-label: 0.12em;
+  --tracking-tight: -0.012em;
+
+  /* --- Elevation ------------------------------------------ */
+  /* Shadows are tinted to the background hue, never pure black. */
+  --shadow-1: 0 1px 2px rgba(4, 10, 12, 0.5);
+  --shadow-2: 0 4px 16px -4px rgba(4, 10, 12, 0.6);
+  --shadow-3: 0 18px 48px -12px rgba(4, 10, 12, 0.7);
+
+  /* --- Depth ------------------------------------------------
+     The lighting that makes a flat layout read as a physical
+     object rather than a page of boxes.
+
+     Two ideas do all the work:
+       A raised surface has light on its top edge and shade on
+       its bottom edge. That single lip is what makes a native
+       button look like a button instead of a filled rectangle.
+       A recessed surface is the inverse: shade on top, light on
+       the bottom, because you are looking into a well.
+
+     Everything is white-on-dark at very low alpha, derived from
+     the existing surfaces, so this adds no new hue. Brand colours
+     are untouched.
+     ------------------------------------------------------------------ */
+
+  /* Top-edge light. The "this surface is a physical lid" highlight. */
+  --lip-light: rgba(255, 255, 255, 0.075);
+  --lip-light-strong: rgba(255, 255, 255, 0.12);
+
+  /* Bottom-edge shade, plus the cast shadow below the surface. */
+  --lip-dark: rgba(2, 6, 8, 0.55);
+
+  /* Raised: rest state, hover, and lifted (menus, popovers). */
+  --raise-1: inset 0 1px 0 var(--lip-light), 0 1px 1px rgba(2, 6, 8, 0.4);
+  --raise-2: inset 0 1px 0 var(--lip-light-strong), 0 2px 5px -1px rgba(2, 6, 8, 0.5);
+  --raise-3: inset 0 1px 0 var(--lip-light-strong), 0 10px 28px -6px rgba(2, 6, 8, 0.65);
+
+  /* Recessed: inputs, and the stage well the picture sits in. */
+  --sink-1: inset 0 1px 2px rgba(2, 6, 8, 0.5), inset 0 -1px 0 rgba(255, 255, 255, 0.035);
+
+  /* Pressed: the inverse of raised, for toggles and active states. */
+  --press: inset 0 2px 4px rgba(2, 6, 8, 0.6), inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+
+  /* The frame that separates two panes, light above dark. */
+  --pane-lip: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  /* --- Layout --------------------------------------------- */
+  --topbar-h: 52px;
+  --rail-w: 72px;
+  --panel-w: 296px;
+  --control-h: 32px;
+  --tap: 36px; /* minimum pointer target */
+
+  /* --- Motion --------------------------------------------- */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur-1: 110ms; /* hover / press */
+  --dur-2: 180ms; /* popover / panel */
+  --dur-3: 280ms; /* stage swap */
+
+  /* --- Z-index scale (no ad-hoc z-50) --------------------- */
+  --z-canvas: 1;
+  --z-overlay: 20; /* crop handles */
+  --z-stage-ui: 30; /* stage toolbar, zoom */
+  --z-rail: 40;
+  --z-sheet: 60; /* modal shortcut sheet */
+}
+
+/* Honour the OS setting. Transitions collapse, logic is untouched. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 1ms;
+    --dur-2: 1ms;
+    --dur-3: 1ms;
+  }
+}

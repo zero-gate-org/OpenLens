@@ -1,0 +1,406 @@
+/* =============================================================
+   OpenLens — landing page
+   -------------------------------------------------------------
+   This page does not get a design system of its own. The editor
+   already has one, two directories up, and this file loads it:
+
+     @import "../styles/tokens.css";
+
+   So there is one accent (mint), one neutral family (cool
+   graphite), one radius scale and one dark theme across the
+   marketing page and the tool it markets. Nothing below
+   introduces a second hue, a second radius or a light mode.
+
+   What this file does add is only what the editor has no use
+   for: a display typeface, a fluid type scale, section rhythm,
+   and a handful of link and button primitives.
+
+   Why the editor keeps its system stack and this page does not:
+   the editor sets 10.5px labels inside 32px controls, where a
+   system font is sharper and costs nothing to load. A hero
+   headline is a different job. One 29KB woff2 is a fair price
+   for it, and `font-display: swap` means it never blocks paint.
+
+   Why dark only, with no toggle: it is a photo tool. A light
+   surround changes how an operator judges an image, which is
+   why the editor's stage is neutral dark too. Flipping this page
+   to light while the editor behind it stays dark would break
+   the promise the page makes in its first line.
+   ============================================================= */
+
+@import "../styles/tokens.css";
+
+/* The reset and focus treatment, shared with the editor rather than rewritten.
+   Loading it here is what gives the page the same focus ring, the same
+   scrollbars and the same `.visually-hidden` as the tool behind the link, and
+   it is also what clears the default body margin: without it the whole document
+   sat 8px in from the edge and pushed the layout 32px wider than the viewport
+   on a phone. */
+@import "../styles/base.css";
+
+/* --- Typefaces --------------------------------------------
+   Two families, both self-hosted as variable woff2 and both
+   subset to latin. No network request goes to a font CDN,
+   which matters on a page whose whole argument is that it
+   does not need a server. */
+
+@font-face {
+  font-family: "Geist";
+  src: url("./fonts/geist-var.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("./fonts/jetbrains-mono-var.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* The page overrides the editor's UI stack with the display face, and adds
+     a mono for the technical register: keyboard hints, pixel counts, the
+     shortcut keys on the tool board. One register for prose, one for
+     numbers, and the numbers never pretend to be prose. */
+  --font-ui: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  /* --- Type scale ------------------------------------------
+     Fluid, with a hard ceiling. The hero clamps rather than
+     jumping between breakpoints, so it never reflows into a
+     four-line headline at an awkward width. */
+  --t-display: clamp(2.5rem, 1.05rem + 5.6vw, 4.5rem);
+  --t-h2: clamp(1.85rem, 1.15rem + 2.6vw, 3rem);
+  --t-h3: clamp(1.25rem, 1.05rem + 0.75vw, 1.6rem);
+  --t-lede: clamp(1.02rem, 0.95rem + 0.42vw, 1.28rem);
+  --t-body: 1rem;
+  --t-small: 0.875rem;
+
+  /* --- Rhythm ---------------------------------------------
+     Sections are big and few. VISUAL_DENSITY 4: enough air
+     to read a headline as a moment, not so much that the
+     page becomes a scroll marathon. */
+  --sp-section: clamp(4.5rem, 3rem + 6vw, 8.5rem);
+  --sp-tight: clamp(2.5rem, 2rem + 2.4vw, 4rem);
+  --wrap: 1240px;
+  --gutter: clamp(1.25rem, 0.6rem + 2.6vw, 2.5rem);
+
+  /* --- Motion ----------------------------------------------
+     The editor's durations are tuned for 32px controls. A page
+     moves at a different speed, so the landing has its own. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 140ms;
+  --dur-2: 220ms;
+  --dur-3: 420ms;
+  --dur-4: 720ms;
+
+  /* --- Z-index ---------------------------------------------
+     The editor publishes a scale in tokens.css and this page
+     adds two layers to it. Nothing else invents a number. */
+  --z-nav: 50;
+  --z-skip: 70;
+
+  /* --- The seam --------------------------------------------------
+     The alpha at which the questions and the closing band meet. Both sections
+     ramp to and from this exact value so the join between them is a
+     continuation rather than a step.
+
+     It is one value in one place because the obvious alternative, writing the
+     same alpha twice in two stylesheets, looks correct until one of them is
+     edited and the seam quietly comes back. */
+  --seam-tint: 0.062;
+}
+
+/* --- Page ------------------------------------------------ */
+
+body {
+  /* The editor's base layer sets overscroll-behavior: none, which is right
+     for a fixed-height app shell and wrong for a document that scrolls. */
+  overscroll-behavior-y: auto;
+  background: var(--surface-0);
+}
+
+#app {
+  height: auto;
+  min-height: 100%;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* --- Layout primitives ------------------------------------ */
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--sp-section);
+}
+
+.section--tight {
+  padding-block: var(--sp-tight);
+}
+
+/* A hairline that runs the full width of the viewport rather than the text
+   column, so a section break reads as a division of the page and not as a
+   rule under a paragraph. */
+.rule {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--line-1);
+}
+
+/* --- Type primitives -------------------------------------- */
+
+.display {
+  font-size: var(--t-display);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  color: var(--text-1);
+}
+
+.h2 {
+  font-size: var(--t-h2);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+  color: var(--text-1);
+}
+
+.h3 {
+  font-size: var(--t-h3);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+}
+
+.lede {
+  font-size: var(--t-lede);
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  color: var(--text-2);
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+.body {
+  font-size: var(--t-body);
+  line-height: 1.62;
+  letter-spacing: -0.008em;
+  color: var(--text-2);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.small {
+  font-size: var(--t-small);
+  line-height: 1.55;
+  color: var(--text-3);
+  max-width: 60ch;
+}
+
+/* The one small uppercase label on the page. It appears in the hero and
+   nowhere else: eight sections with a label above every headline is a
+   template, not a page. */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* --- Buttons and links ------------------------------------
+   Two shapes and no more. The filled one is the primary CTA
+   and it carries the same label everywhere on the page, so a
+   visitor who has read the hero knows what the button says.
+   The text one is navigation, and it never pretends to be a
+   button. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  height: 46px;
+  padding-inline: var(--s-7);
+  border-radius: var(--r-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background var(--dur-1) var(--ease),
+    border-color var(--dur-1) var(--ease),
+    transform var(--dur-1) var(--ease);
+}
+
+.btn--primary {
+  /* Mint fill with near-black ink: 10.8:1, well past AA for body text. */
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+  box-shadow: var(--raise-1);
+}
+
+.btn--primary:hover {
+  background: #86f0bb;
+  border-color: #86f0bb;
+}
+
+.btn--primary:active {
+  transform: translateY(1px);
+  box-shadow: var(--press);
+}
+
+/* A quiet outline for secondary actions inside the page. Text is
+   --text-1 on --surface-0, so contrast does not depend on the fill. */
+.btn--quiet {
+  background: transparent;
+  color: var(--text-1);
+  border: 1px solid var(--line-2);
+}
+
+.btn--quiet:hover {
+  border-color: var(--line-3);
+  background: var(--surface-2);
+}
+
+.btn--quiet:active {
+  transform: translateY(1px);
+}
+
+/* Text navigation with an arrow that slides on hover. */
+.arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-1);
+  text-decoration: none;
+  border-radius: var(--r-xs);
+}
+
+.arrow-link svg {
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+.arrow-link:hover svg {
+  transform: translateX(3px);
+}
+
+.arrow-link:hover {
+  color: var(--accent);
+}
+
+/* --- Reveal -----------------------------------------------
+   Sections rise a little as they arrive. The hidden state is
+   scoped to `.js`, which an inline script in the document head
+   sets before first paint, so a visitor without scripting, or
+   a crawler, or a browser whose observer never fires, still
+   gets every word of the page. */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition:
+    opacity var(--dur-4) var(--ease-out),
+    transform var(--dur-4) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.js [data-reveal][data-shown] {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* --- Accessibility ---------------------------------------- */
+
+/*
+ * Hidden by clipping rather than by moving it off screen.
+ *
+ * `translateY(-200%)` left the top edge of the pill visible against a
+ * translucent backdrop-filter header, which read as a stray mint smudge at the
+ * top of the page. Clipping with `clip-path` keeps the element where it is in the
+ * accessibility tree and in the tab order, and takes the paint out entirely.
+ */
+.skip-link {
+  position: fixed;
+  top: var(--s-3);
+  left: var(--s-3);
+  z-index: var(--z-skip);
+  padding: var(--s-3) var(--s-5);
+  border-radius: var(--r-md);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  text-decoration: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-2) var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  clip-path: inset(0 0 0 0);
+}
+
+/* --- Reduced motion ---------------------------------------
+   Nothing on this page moves for longer than 720ms, so the
+   transition collapse below is the whole story. The reveal
+   targets are un-hidden outright rather than left waiting for
+   an observer that will never be asked. */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 1ms;
+    --dur-2: 1ms;
+    --dur-3: 1ms;
+    --dur-4: 1ms;
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn:active,
+  .arrow-link:hover svg {
+    transform: none;
+  }
+}
